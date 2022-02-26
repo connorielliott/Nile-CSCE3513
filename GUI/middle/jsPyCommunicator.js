@@ -17,6 +17,7 @@ const io = socketio(server, {
 	}
 });
 
+
 //browser listen / send
 io.on("connection", (socket) => {
 	socket.emit("data", "Hello from NodeJS!");
@@ -40,7 +41,6 @@ client.send(data, 20001, "127.0.0.1", (err) => {
 		console.log(`[to:python] sent: ${data}`);
 	}
 });
-
 
 //python listen
 client.on("message", (msg, info) => {

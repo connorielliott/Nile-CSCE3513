@@ -6,16 +6,22 @@ function fillList(teamColor, amount, offset) {
 		let num = document.createElement("p");
 		num.setAttribute("class", "list-number");
 		num.innerHTML = zero(i + 1, 2);
-		let input = document.createElement("input");
-		input.setAttribute("class", "list-input");
-		input.setAttribute("tabindex", offset + 2 * i);
+		let input_id = document.createElement("input");
+		input_id.setAttribute("class", "list-input list-input-id");
+		input_id.setAttribute("tabindex", offset + 4 * i);
+		input_id.setAttribute("placeholder", "User ID Number");
+		let input_name = document.createElement("input");
+		input_name.setAttribute("class", "list-input list-input-name");
+		input_name.setAttribute("tabindex", offset + 4 * i + 1);
+		input_name.setAttribute("placeholder", "Code Name");
 		item.appendChild(num);
-		item.appendChild(input);
+		item.appendChild(input_id);
+		item.appendChild(input_name);
 		container.appendChild(item);
 	}
 }
 
 window.onload = function() {
-	fillList("red", 20, 1);
-	fillList("green", 20, 2);
+	fillList("red", 15, 1);
+	fillList("green", 15, 3);
 };

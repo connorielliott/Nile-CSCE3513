@@ -34,7 +34,7 @@ function F3() {
 		document.getElementById("f3-button").innerHTML = "F3 to Start Game";
 	}
 	else {
-		
+		//
 	}
 	//~	send("start game");
 	gameActive = true;
