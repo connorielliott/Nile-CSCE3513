@@ -33,10 +33,21 @@ function F3() {
 		switchToScreen("play-action-screen");
 		document.getElementById("f3-button").innerHTML = "F3 to Start Game";
 	}
-	else {
-		//
+	
+	//merge user info into one object
+	let idInputs = document.getElementsByClassName("list-input-id"),
+		nameInputs = document.getElementsByClassName("list-input-name");
+	let data = [];
+	for(let i = 0; i < idInputs.length; i++) {
+		if(typeof Number(idInputs[i].value) == "NaN" || idInputs[i].value.length == 0) continue;
+		data.push({
+			id: Number(idInputs[i].value),
+			name: nameInputs[i].value
+		});
 	}
-	//~	send("start game");
+	send(data);
+	
+	//
 	gameActive = true;
 }
 

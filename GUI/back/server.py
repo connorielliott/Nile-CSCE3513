@@ -13,16 +13,19 @@ UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 # Bind to address and ip
 UDPServerSocket.bind((localIP, localPort))
 
+# send message back
+def send(address, bytesToSend):
+	UDPServerSocket.sendto(bytesToSend, address)
+	print("[.->n]\t", bytesToSend)
+
 # Listen for incoming datagrams
 while(True):
-	
+	# wait for message
 	bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 	message = bytesAddressPair[0]
 	address = bytesAddressPair[1]
-	clientMsg = "[fr:nodejs] {}".format(message)
-	
+	clientMsg = "[n->.]\t{}".format(message)
 	print(clientMsg)
 	
-	# Sending a reply to client
-	UDPServerSocket.sendto(bytesToSend, address)
-	print("[to:nodejs]", bytesToSend)
+	# send reply
+	send(address, bytesToSend)
