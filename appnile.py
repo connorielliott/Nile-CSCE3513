@@ -1,9 +1,17 @@
 import os
-import pandas as pd
+import csv
 
 os.system("echo Pulling from postgres...")
 os.system("heroku pg:psql postgresql-dimensional-74388 --app appnile --command \"COPY (player) TO STDOUT WITH CSV\" > file.csv")
 os.system("echo Done!")
 
-df = pd.read_csv("file.csv")
-print(df)
+file = open("file.csv")
+csvreader = csv.reader(file)
+
+header = next(csvreader)
+print(header)
+
+for rows in csvreader:
+    print(rows)
+
+file.close()
