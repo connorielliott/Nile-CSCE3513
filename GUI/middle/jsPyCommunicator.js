@@ -20,16 +20,17 @@ const io = socketio(server, {
 
 //send to browser
 function sendToBrowser(data) {
+	console.log(`[N->b]\t${data}`);
 	io.emit("data", data);
-	console.log(`[.->b]\t${data}`);
 }
 
 //browser listen / send
 io.on("connection", (socket) => {
+	console.log(`browser connected`);
 	sendToBrowser(`Hello from NodeJS!`);
 	
 	socket.on("data", (data) => {
-		console.log(`[b->.]\t${data}`);
+		console.log(`[b->N]\t${data}`);
 		
 		//relay to python
 		sendToPython(data);
@@ -43,13 +44,9 @@ io.on("connection", (socket) => {
 
 //send to python
 function sendToPython(data) {
-	client.send(Buffer.from(data), 20001, "127.0.0.1", (err) => {
-		if(err) {
-			console.error(`! [.->p]\t${err}`);
-		}
-		else {
-			console.log(`[.->p]\t${data}`);
-		}
+	console.log(`[N->p]\t${data}`);
+	client.send(Buffer.from(data.toString()), 20001, "127.0.0.1", (err) => {
+		if(err){}	//don't care
 	});
 }
 
@@ -58,6 +55,6 @@ sendToPython(`Hello from NodeJS`);
 
 //python listen
 client.on("message", (msg, info) => {
+	console.log(`[p->N]\t${msg.toString()}`);
 	sendToBrowser(msg.toString());
-	console.log(`[p->.]\t${msg.toString()}`);
 });

@@ -5,7 +5,6 @@ localIP     = "127.0.0.1"
 localPort   = 20001
 bufferSize  = 1024
 msgFromServer       = "Hello from Python Server"
-bytesToSend         = str.encode(msgFromServer)
 
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -14,9 +13,18 @@ UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPServerSocket.bind((localIP, localPort))
 
 # send message back
-def send(address, bytesToSend):
-	UDPServerSocket.sendto(bytesToSend, address)
-	print("[.->n]\t", bytesToSend)
+def send(address, message):
+	print("[P->n]\t", str.encode(message))
+	UDPServerSocket.sendto(str.encode(message), address)
+
+# handle messages from bridge
+def handle_msg(msg, address):
+	# say hello as a response
+	send(address, msgFromServer)
+	
+	# if(msg == "kill"):
+		# somehow call kill_all() in the launcher script
+	
 
 # Listen for incoming datagrams
 while(True):
@@ -24,8 +32,8 @@ while(True):
 	bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 	message = bytesAddressPair[0]
 	address = bytesAddressPair[1]
-	clientMsg = "[n->.]\t{}".format(message)
+	clientMsg = "[n->P]\t{}".format(message)
 	print(clientMsg)
 	
-	# send reply
-	send(address, bytesToSend)
+	# handle messages
+	handle_msg(str(message), address)
