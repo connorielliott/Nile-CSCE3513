@@ -22,6 +22,11 @@ def handle_msg(msg, address):
 	# say hello as a response
 	send(address, msgFromServer)
 	
+	# this is an example message thing.
+	# could use two arrays or maybe a dictionary which associates messages and functions to run
+	if(msg == "john"):
+		print("YOU SAID JOHN!!!!")
+	
 	# if(msg == "kill"):
 		# somehow call kill_all() in the launcher script
 	
@@ -31,6 +36,7 @@ while(True):
 	# wait for message
 	bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 	message = bytesAddressPair[0]
+	message = str(message)[2:-1]
 	address = bytesAddressPair[1]
 	clientMsg = "[n->P]\t{}".format(message)
 	print(clientMsg)
