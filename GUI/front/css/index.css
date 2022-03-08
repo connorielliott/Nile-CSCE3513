@@ -1,0 +1,66 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.screen {
+	display: none;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+#player-entry-screen {
+	display: grid;
+	grid-template-areas:
+		"pet per peg"
+		"pei per peg"
+		"peb peb peb";
+	grid-template-columns: 40% 30% 30%;
+	grid-template-rows: 10% 80% 10%;
+}
+#play-action-screen {
+	display: none;
+	grid-template-areas:
+		"per per peg peg"
+		"pea pea pea pea"
+		"peb peb peb peb";
+	grid-template-columns: 20% 25% 25%;
+	grid-template-rows: 40% 50% 10%;
+}
+
+.cont {
+	margin: 0;
+	padding: 0;
+	border: dashed 1px #000;
+}
+.title-cont {
+	grid-area: pet;
+}
+.info-cont {
+	grid-area: pei;
+}
+.red-team-cont {
+	grid-area: per;
+}
+.green-team-cont {
+	grid-area: peg;
+}
+.action-cont {
+	grid-area: pea;
+}
+.buttons-cont {
+	grid-area: peb;
+}
+
+.cont * {
+	margin: 0;
+	padding: 0;
+}
+
+.list-item * {
+	display: inline-block;
+	margin: 0;
+}
