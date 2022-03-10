@@ -5,6 +5,7 @@ localIP     = "127.0.0.1"
 localPort   = 20001
 bufferSize  = 1024
 msgFromServer       = "Hello from Python Server"
+address = None
 
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -13,14 +14,14 @@ UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPServerSocket.bind((localIP, localPort))
 
 # send message back
-def send(address, message):
+def send(message):
 	print("[P->n]\t", str.encode(message))
 	UDPServerSocket.sendto(str.encode(message), address)
 
 # handle messages from bridge
-def handle_msg(msg, address):
+def handle_msg(msg):
 	# say hello as a response
-	send(address, msgFromServer)
+	send(msgFromServer)
 	
 	# this is an example message thing.
 	# could use two arrays or maybe a dictionary which associates messages and functions to run
@@ -42,4 +43,4 @@ while(True):
 	print(clientMsg)
 	
 	# handle messages
-	handle_msg(str(message), address)
+	handle_msg(str(message))
