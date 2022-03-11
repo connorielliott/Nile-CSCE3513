@@ -27,11 +27,11 @@ function F1() {
 	switchToScreen("player-entry-screen");
 }
 
-function F3() {
-	//after all players entered, f3 key will move to play action screen for rest of game
+function F5() {
+	//after all players entered, f5 key will move to play action screen for rest of game
 	if(currentScreenId !== "play-action-screen") {
 		switchToScreen("play-action-screen");
-		document.getElementById("f3-button").innerHTML = "F3 to Start Game";
+		document.getElementById("f5-button").innerHTML = "F5 to Start Game";
 	}
 	
 	//merge user info into one object
@@ -59,8 +59,8 @@ window.onkeydown = (ev) => {
 		case 112:
 			F1();
 			break;
-		case 114:
-			F3();
+		case 116:
+			F5();
 			break;
 	}
 };

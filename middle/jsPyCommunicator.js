@@ -5,6 +5,9 @@ const dgram = require("dgram");
 const http = require("http");
 const socketio = require("socket.io");
 
+//debug
+const DEBUG = false;
+
 //connect to python server
 const client = dgram.createSocket("udp4");
 
@@ -20,7 +23,7 @@ const io = socketio(server, {
 
 //send to browser
 function sendToBrowser(data) {
-	console.log(`[N->b]\t${data}`);
+	if(DEBUG) console.log(`[N->b]\t${data}`);
 	io.emit("data", data);
 }
 
@@ -30,7 +33,7 @@ io.on("connection", (socket) => {
 	sendToBrowser(`Hello from NodeJS!`);
 	
 	socket.on("data", (data) => {
-		console.log(`[b->N]\t${data}`);
+		if(DEBUG) console.log(`[b->N]\t${data}`);
 		
 		//relay to python
 		sendToPython(data);
@@ -44,7 +47,7 @@ io.on("connection", (socket) => {
 
 //send to python
 function sendToPython(data) {
-	console.log(`[N->p]\t${data}`);
+	if(DEBUG) console.log(`[N->p]\t${data}`);
 	client.send(Buffer.from(data.toString()), 20001, "127.0.0.1", (err) => {
 		if(err){}	//don't care
 	});
@@ -55,6 +58,6 @@ sendToPython(`Hello from NodeJS`);
 
 //python listen
 client.on("message", (msg, info) => {
-	console.log(`[p->N]\t${msg.toString()}`);
+	if(DEBUG) console.log(`[p->N]\t${msg.toString()}`);
 	sendToBrowser(msg.toString());
 });

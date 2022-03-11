@@ -10,29 +10,32 @@ all_processes = []
 
 # cmd is smth you'd type into a terminal
 def open(cmd):
-	process = subprocess.Popen(cmd)
+	process = subprocess.Popen(cmd, shell=True)
 	all_processes.append(process)
 
 # open everything that needs to be opened
 def open_all():
 	# open game master python program
-	#
+	# this already includes udp python server and database python file
+	# (https://docs.python.org/3/library/subprocess.html#subprocess.Popen)
+	print("opening main python program...")
+	open("python ./back/main.py")
 	
 	# open database python
 	#
 	
-	# open udp python server (https://docs.python.org/3/library/subprocess.html#subprocess.Popen)
-	print("opening python udp server...")
-	open("python ./gui/back/server.py")
+	# open udp python server 
+	#print("opening python udp server...")
+	#open("python ./back/server.py")
 	
 	# open browser-python nodejs bridge
 	print("opening browser-node-python bridge...")
-	open("node ./gui/middle/jsPyCommunicator.js")
+	open("node ./middle/jsPyCommunicator.js")
 	
 	# open html gui (https://stackoverflow.com/a/40905794)
 	print("opening web browser...")
 	filestr = "file:///"
-	index_pathstr = os.path.realpath("./gui/front/index.html")
+	index_pathstr = os.path.realpath("./front/index.html")
 	webbrowser.open_new(filestr + index_pathstr)
 
 # make sure all the subprocesses are dead upon end of program
