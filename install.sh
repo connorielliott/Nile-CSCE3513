@@ -1,0 +1,4 @@
+#!/bin/bash
+py -m pip install psycopg2
+py -m pip install wxPython
+npm install socket.io
