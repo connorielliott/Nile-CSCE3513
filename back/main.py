@@ -19,8 +19,33 @@ def handler(msg):
 server.start(handler)
 
 
-# example using server.send(<str>)
-print("starting countup")
-for i in range(0, 11):
-	time.sleep(1)
-	server.send("hello " + str(i))
+
+# ----------------------Game Countdown Timer----------------------
+gameTime = 70  # Set game time duration variable
+
+# Game countdown timer begins here
+print("Begin game in t-minus")
+for i in range(10, 0, -1):
+    server.send(str(i))                        #print(i)
+    time.sleep(1)
+
+
+server.send(str("Starting Game"))              #print("Starting Game")  #Starts game
+gameActive = True
+# Gametime takes place here
+
+
+# One minute warning
+time.sleep(gameTime - 60)
+server.send("Warning: 1 minute remaining")     #print("Warning: 1 minute remaining")
+time.sleep(50)
+
+
+# End of game countdown
+server.send("Game ending in t-minus")          #print("Game ending in t-minus")
+for i in range(10, 0, -1):
+    server.send(str(i))                        #print(i)
+    time.sleep(1)
+server.send("Game over")                       #print("Game over")
+gameActive = False
+#------------------------------------------------------------------
