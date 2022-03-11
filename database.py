@@ -33,3 +33,16 @@ class DB:
 		data = (id, first_name, last_name, codename)
 		self.cursor.execute(query, data)
 		self.connection.commit()
+		
+	def searchID(self,id):
+		
+		query = "select COUNT(id) from player WHERE id =" + str(id) + ";"
+		self.cursor.execute(query)
+		retrieve = self.cursor.fetchall()
+		for row in retrieve:
+			if row[0] > 0:
+				print("Record exists")
+				return True
+			else:
+				print("Record does not exists")
+				return False
