@@ -15,14 +15,39 @@ UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 # Bind to address and ip
 UDPServerSocket.bind((localIP, localPort))
 
-# send message back
+
+# send raw message
 def send(message):
 	if(address == None): 
 		print("! address not defined")
 		return
+	message = str(message)
 	print_msg = "[P->n]\t{}".format(message)
 	print(print_msg)
 	UDPServerSocket.sendto(str.encode(message), address)
+
+# send information (field:value,field:value,...)
+def inform(field_array, value_array):
+	stop_index = max(len(field_array), len(value_array))
+	message = ""
+	for i in range(0, stop_index):
+		if i < len(field_array):
+			field = field_array[i]
+		else:
+			field = ""
+		if i < len(value_array):
+			value = value_array[i]
+		else:
+			value = ""
+		message += "{f}:{v}".format(f=field, v=value)
+		if i < stop_index - 1:
+			message += ","
+	send(message)
+
+# send message to log
+def log(message):
+	send("log:{}".format(message))
+
 
 # Listen for incoming datagrams
 def listen():
@@ -39,7 +64,7 @@ def listen():
 		
 		# handle messages
 		handler(str(message))
-	
+
 
 # start function, can pass in handler function from main.py
 def start(handler_funct):
@@ -48,5 +73,7 @@ def start(handler_funct):
 	try:
 		print("trying to start listening thread...")
 		_thread.start_new_thread(listen, ())
+		# keep this
+		send("Hello from Python Server")
 	except:
 		print("! failed to start listening thread")

@@ -30,7 +30,7 @@ function sendToBrowser(data) {
 //browser listen / send
 io.on("connection", (socket) => {
 	console.log(`browser connected`);
-	sendToBrowser(`Hello from NodeJS!`);
+	//sendToBrowser(`Hello from NodeJS`);
 	
 	socket.on("data", (data) => {
 		if(DEBUG) console.log(`[b->N]\t${data}`);

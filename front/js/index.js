@@ -1,4 +1,4 @@
-var gameActive = false;
+var gameState = 0;
 var currentScreenId = "player-entry-screen";
 
 function switchToScreen(id) {
@@ -22,33 +22,49 @@ function clearInputs() {
 
 function F1() {
 	//when game ends, stay on play action screen until f1 pressed. it will clear out player data and return to player input screen
-	if(gameActive) return;
-	clearInputs();
+	if(gameState != 0) return;
+	if(currentScreenId === "player-entry-screen") {
+		clearInputs();
+	}
 	switchToScreen("player-entry-screen");
 }
 
 function F5() {
 	//after all players entered, f5 key will move to play action screen for rest of game
-	if(currentScreenId !== "play-action-screen") {
-		switchToScreen("play-action-screen");
-		document.getElementById("f5-button").innerHTML = "F5 to Start Game";
+	if(!checkEnoughPlayers()) {
+		return;
 	}
 	
-	//merge user info into one object
+	//send user infos
+	//~	you were here
 	let idInputs = document.getElementsByClassName("list-input-id"),
 		nameInputs = document.getElementsByClassName("list-input-name");
-	let data = [];
 	for(let i = 0; i < idInputs.length; i++) {
-		if(typeof Number(idInputs[i].value) == "NaN" || idInputs[i].value.length == 0) continue;
-		data.push({
-			id: Number(idInputs[i].value),
-			name: nameInputs[i].value
-		});
+		if(idInputs[i].value.trim().length == 0 || typeof Number(idInputs[i].value) == "NaN") continue;
+		let fields = [],
+			values = [];
+		fields.push("id");
+		values.push(idInputs[i].value.trim());
+		if(nameInputs[i].value.trim().length == 0) {
+			fields.push("dba");
+			values.push("query");
+		}
+		else {
+			fields.push("dba");
+			values.push("modify");
+			fields.push("name");
+			fields.push(nameInputs[i].value.trim());
+		}
+		send(fvFormat(fields, values));
 	}
-	send(data);
 	
-	//
-	gameActive = true;
+	//send gameState update
+	send("gameState:1");
+	
+	//switch to play action screen
+	if(currentScreenId !== "play-action-screen") {
+		switchToScreen("play-action-screen");
+	}
 }
 
 window.onkeydown = (ev) => {

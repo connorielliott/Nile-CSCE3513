@@ -1,83 +1,42 @@
 import os
-import subprocess
 import webbrowser
-import wx
-import wx.adv
-import time
+import _thread
 
-# storing processes to kill them later
-all_processes = []
+# distinguishes between .js and .py and runs node or python accordingly
+def open(x):
+	if x.strip()[-2:] == "py":
+		os.system("python {}".format(x))
+	elif x.strip()[-2:] == "js":
+		os.system("node {}".format(x))
+	else:
+		os.system(x)
 
-# cmd is smth you'd type into a terminal
-def open(cmd):
-	process = subprocess.Popen(cmd, shell=True)
-	all_processes.append(process)
+# run in new thread
+def run(x):
+	try:
+		print("starting \"{}\"...".format(x))
+		_thread.start_new_thread(open, (x,))
+	except:
+		print("! failed to start \"{}\"".format(x))
 
-# open everything that needs to be opened
-def open_all():
+if __name__ == "__main__":
+	print("app start...")
+	
+	# open splashscreen
+	run("./front/splashscreen.py")
+	
 	# open game master python program
 	# this already includes udp python server and database python file
-	# (https://docs.python.org/3/library/subprocess.html#subprocess.Popen)
-	print("opening main python program...")
-	open("python ./back/main.py")
+	run("./back/main.py")
 	
 	# open database python
 	#
 	
-	# open udp python server 
-	#print("opening python udp server...")
-	#open("python ./back/server.py")
-	
 	# open browser-python nodejs bridge
-	print("opening browser-node-python bridge...")
-	open("node ./middle/jsPyCommunicator.js")
+	run("./middle/jsPyCommunicator.js")
 	
 	# open html gui (https://stackoverflow.com/a/40905794)
 	print("opening web browser...")
 	filestr = "file:///"
 	index_pathstr = os.path.realpath("./front/index.html")
 	webbrowser.open_new(filestr + index_pathstr)
-
-# make sure all the subprocesses are dead upon end of program
-def kill_all():
-	# (https://stackoverflow.com/a/320712)
-	print("killing all processes...")
-	for p in all_processes:
-		p.kill()
-
-# splashscreen stuff
-class MyFrame(wx.Frame):
-	def __init__(self):
-		wx.Frame.__init__(self, None, wx.ID_ANY, "Splash Screen", size = (0, 0))
-
-		bitmap = wx.Bitmap('./images/logo.jpg')
-		image = bitmap.ConvertToImage()
-		image = image.Scale(600, 600, wx.IMAGE_QUALITY_HIGH)
-		result = wx.Bitmap(image)
-
-		splash = wx.adv.SplashScreen(
-					result, 
-					wx.adv.SPLASH_CENTER_ON_SCREEN | wx.adv.SPLASH_TIMEOUT, 3000, self)
-
-		print("displaying splash screen...")
-		splash.Show()
-
-		# actually open all the stuff here
-		open_all()
-		
-		time.sleep(3)
-		
-		print("ending splash screen...")
-		# splash.Hide()
-		self.Close()
-
-if __name__ == "__main__":
-	print("app start...")
-	
-	# splashscreen
-	# open_all() is called inside the splashscreen init func
-	app = wx.App(False)
-	frame = MyFrame()
-	app.MainLoop()
-
-# have a way to get messages from ./gui/back/server.py

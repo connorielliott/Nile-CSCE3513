@@ -7,11 +7,11 @@ function fillList(teamColor, amount, offset) {
 		num.setAttribute("class", "list-number");
 		num.innerHTML = zero(i + 1, 2);
 		let input_id = document.createElement("input");
-		input_id.setAttribute("class", "list-input list-input-id");
+		input_id.setAttribute("class", "list-input list-input-id team-" + teamColor + " list-input-id-" + teamColor);
 		input_id.setAttribute("tabindex", offset + 4 * i);
 		input_id.setAttribute("placeholder", "User ID Number");
 		let input_name = document.createElement("input");
-		input_name.setAttribute("class", "list-input list-input-name");
+		input_name.setAttribute("class", "list-input list-input-name team-" + teamColor + " list-input-name-" + teamColor);
 		input_name.setAttribute("tabindex", offset + 4 * i + 1);
 		input_name.setAttribute("placeholder", "Code Name");
 		item.appendChild(num);

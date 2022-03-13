@@ -1,51 +1,66 @@
 import time
+import server	# this is ours, handles messaging front-end
 
-# this is ours, handles messaging front-end
-import server
 
-# handle messages from bridge
+# --- START --------------- Game Variables --------------- START ---
+
+gameState = 0
+gameTime = 360									# Set game time duration variable
+
+# ---- END ---------------- Game Variables ---------------- END ----
+
+
+# --- START ------------- GUI Message Relay -------------- START ---
+
+# handle messages
 def handler(msg):
-	# say hello as a response
-	server.send("Hello from Python Server")
+	# always respond with updated gamestate var in front end
+	server.send("gameState:{}".format(gameState))
 	
-	# example handling message from browser
-	#~could use two arrays or maybe a dictionary which associates messages and functions to run
-	if(msg == "john"):
-		print("YOU SAID JOHN!!!!")
+	# interpret messages
+	#~you were here
 	
+	# for i in range(0, max(len(fields), len(values))):
+		# field = fields[i]
+		# value = values[i]
+		# gameState update
+		#if field == "gameState" and gameState == 0:
+			# start countdown
 
-# actually start listening server
-# pass in handler function which can manage messages received from browser
+# must be before all server.send(<str>) usages since this gets the address of the bridge
 server.start(handler)
 
+# ---- END -------------- GUI Message Relay --------------- END ----
 
 
-# ----------------------Game Countdown Timer----------------------
-gameTime = 70  # Set game time duration variable
+# --- START ------------ Game Countdown Timer ------------ START ---
 
 # Game countdown timer begins here
-print("Begin game in t-minus")
+server.log("Begin game in t-minus")				#print("Begin game in t-minus")
+gameState = 1
 for i in range(10, 0, -1):
-    server.send(str(i))                        #print(i)
-    time.sleep(1)
+	server.log(i)								#print(i)
+	time.sleep(1)
 
 
-server.send(str("Starting Game"))              #print("Starting Game")  #Starts game
-gameActive = True
+server.log("Starting Game")						#print("Starting Game")  #Starts game
+gameState = 2
 # Gametime takes place here
 
 
 # One minute warning
 time.sleep(gameTime - 60)
-server.send("Warning: 1 minute remaining")     #print("Warning: 1 minute remaining")
-time.sleep(50)
+server.log("Warning: 1 minute remaining")		#print("Warning: 1 minute remaining")
+time.sleep(30)
+#~time.sleep is blocking, may interfere with game stuffs
 
 
 # End of game countdown
-server.send("Game ending in t-minus")          #print("Game ending in t-minus")
-for i in range(10, 0, -1):
-    server.send(str(i))                        #print(i)
-    time.sleep(1)
-server.send("Game over")                       #print("Game over")
-gameActive = False
-#------------------------------------------------------------------
+server.log("Game ending in t-minus")			#print("Game ending in t-minus")
+for i in range(30, 0, -1):
+	server.log(i)								#print(i)
+	time.sleep(1)
+server.log("Game over")							#print("Game over")
+gameState = 0
+
+# ---- END ------------- Game Countdown Timer ------------- END ----

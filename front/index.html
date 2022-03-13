@@ -14,8 +14,8 @@
 		<script src="./js/comms.js"></script>
 	</head>
 	<body>
+		<!-- player entry screen -->
 		<div class="screen" id="player-entry-screen">
-			<!-- player entry screen -->
 			<div class="cont title-cont">
 				<h1 id="title">Player Entry</h1>
 			</div>
@@ -34,13 +34,13 @@
 			</div>
 			
 			<div class="cont buttons-cont">
-				<button class="button" id="f1-button">F1 to Clear Data</button>
-				<button class="button" id="f5-button">F5 to Switch to Play Action Screen</button>
+				<button class="button f1-button" onclick="F1();">F1 to Clear Data</button>
+				<button class="button f5-button" onclick="F5();">F5 to Start Game</button>
 			</div>
 		</div>
 		
+		<!-- play action screen -->
 		<div class="screen" id="play-action-screen">
-			<!-- play action screen -->
 			<div class="cont team-cont red-team-cont" id="red-team-action">
 				<div>RED Team</div>
 				<div class="team-list" id="red-team-action-list"></div>
@@ -55,9 +55,8 @@
 			</div>
 			
 			<div class="cont buttons-cont">
-				<button class="button" id="f1-button" onclick="F1();">F1 to Switch to Player Entry Screen</button>
-				<button class="button" id="f3-button" onclick="F5();">F5 to Start Game</button>
-				<!-- ~ is this the specified functionality? there's talk of f5 instead of f3? -->
+				<button class="button f1-button" onclick="F1();">F1 to Switch to Player Entry Screen</button>
+				<button class="button f5-button" onclick="F5();" disabled>F5 to Start Game</button>
 			</div>
 		</div>
 	</body>

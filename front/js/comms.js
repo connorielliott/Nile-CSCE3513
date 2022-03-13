@@ -8,6 +8,11 @@ function send(data) {
 socket.on("data", (data) => {
 	console.log("[n->B]\t" + data);
 	
-	//do stuff with data
+	//interpret message
 	//
+	
+	//do stuff
+	//for(let i = 0; i < Math.max(fieldArray.length, valueArray.length); i++) {
+		//
+	//}
 });
