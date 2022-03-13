@@ -1,7 +1,8 @@
 import json
 import socket
-import _thread
-# https://stackoverflow.com/a/64402988
+import _thread			# https://stackoverflow.com/a/64402988
+import two_arrays.py	# thanks Benton
+
 
 localIP     = "127.0.0.1"
 localPort   = 20001
