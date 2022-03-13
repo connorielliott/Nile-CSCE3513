@@ -39,7 +39,7 @@ server.start(handler)
 server.log("Begin game in t-minus")				#print("Begin game in t-minus")
 gameState = 1
 for i in range(10, 0, -1):
-	server.log(i)								#print(i)
+	server.clock(i)								#print(i)
 	time.sleep(1)
 
 
@@ -58,7 +58,7 @@ time.sleep(30)
 # End of game countdown
 server.log("Game ending in t-minus")			#print("Game ending in t-minus")
 for i in range(30, 0, -1):
-	server.log(i)								#print(i)
+	server.clock(i)								#print(i)
 	time.sleep(1)
 server.log("Game over")							#print("Game over")
 gameState = 0

@@ -17,6 +17,7 @@ function fvFormat(fields, values) {
 }
 
 function checkEnoughPlayers() {
+	//test if player entry data is good
 	let redIdInputs = document.getElementsByClassName("list-input-team-red"),
 		greenIdInputs = document.getElementsByClassName("list-input-team-green");
 	let redGood = false,

@@ -24,11 +24,12 @@ html, body {
 #play-action-screen {
 	display: none;
 	grid-template-areas:
-		"per per peg peg"
-		"pea pea pea pea"
-		"peb peb peb peb";
-	grid-template-columns: 20% 25% 25%;
-	grid-template-rows: 40% 50% 10%;
+		"pet pec pec"
+		"pel per peg"
+		"pel pea pea"
+		"peb peb peb";
+	grid-template-columns: 32% 34% 34%;
+	grid-template-rows: 10% 40% 40% 10%;
 }
 
 .cont {
@@ -39,8 +40,14 @@ html, body {
 .title-cont {
 	grid-area: pet;
 }
+.clock-cont {
+	grid-area: pec;
+}
 .info-cont {
 	grid-area: pei;
+}
+.log-cont {
+	grid-area: pel;
 }
 .red-team-cont {
 	grid-area: per;

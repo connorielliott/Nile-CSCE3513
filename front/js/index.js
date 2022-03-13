@@ -21,7 +21,8 @@ function clearInputs() {
 }
 
 function F1() {
-	//when game ends, stay on play action screen until f1 pressed. it will clear out player data and return to player input screen
+	//when gamestate is 0, switch to player entry screen
+	//if already on this screen, clear player entry data
 	if(gameState != 0) return;
 	if(currentScreenId === "player-entry-screen") {
 		clearInputs();
@@ -30,13 +31,14 @@ function F1() {
 }
 
 function F5() {
-	//after all players entered, f5 key will move to play action screen for rest of game
-	if(!checkEnoughPlayers()) {
+	//when gamestate is 0, check if player entries are valid and switch gamestate to 1 if good
+	//also switch to play action screen
+	if(gameState != 0 || !checkEnoughPlayers()) {
 		return;
 	}
 	
 	//send user infos
-	//~	you were here
+	//~	make better checks for valid player entry data
 	let idInputs = document.getElementsByClassName("list-input-id"),
 		nameInputs = document.getElementsByClassName("list-input-name");
 	for(let i = 0; i < idInputs.length; i++) {
@@ -48,12 +50,14 @@ function F5() {
 		if(nameInputs[i].value.trim().length == 0) {
 			fields.push("dba");
 			values.push("query");
+			fields.push("query");
+			values.push("name");
 		}
 		else {
 			fields.push("dba");
 			values.push("modify");
 			fields.push("name");
-			fields.push(nameInputs[i].value.trim());
+			values.push(nameInputs[i].value.trim());
 		}
 		send(fvFormat(fields, values));
 	}
@@ -65,6 +69,13 @@ function F5() {
 	if(currentScreenId !== "play-action-screen") {
 		switchToScreen("play-action-screen");
 	}
+}
+
+function log(message) {
+	let li = document.createElement("li");
+	li.setAttribute("class", "log-message");
+	li.innerHTML = message;
+	document.getElementById("log").appendChild(li);
 }
 
 window.onkeydown = (ev) => {

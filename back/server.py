@@ -48,6 +48,10 @@ def inform(field_array, value_array):
 def log(message):
 	send("log:{}".format(message))
 
+# send number of seconds to be registered in clock
+def clock(seconds):
+	send("clock:{}".format(seconds))
+
 
 # Listen for incoming datagrams
 def listen():
