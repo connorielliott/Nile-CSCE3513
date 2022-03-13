@@ -30,7 +30,7 @@ function sendToBrowser(data) {
 //browser listen / send
 io.on("connection", (socket) => {
 	console.log(`browser connected`);
-	//sendToBrowser(`Hello from NodeJS`);
+	if(DEBUG) sendToBrowser(`Hello from NodeJS`);
 	
 	socket.on("data", (data) => {
 		if(DEBUG) console.log(`[b->N]\t${data}`);
@@ -54,7 +54,10 @@ function sendToPython(data) {
 }
 
 //python send
-sendToPython(`Hello from NodeJS`);
+//do not remove, this gives the python server an address to hold on to and use
+setTimeout(() => {
+	sendToPython(`Hello from NodeJS`);
+}, 1000);
 
 //python listen
 client.on("message", (msg, info) => {

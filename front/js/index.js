@@ -33,7 +33,8 @@ function F1() {
 function F5() {
 	//when gamestate is 0, check if player entries are valid and switch gamestate to 1 if good
 	//also switch to play action screen
-	if(gameState != 0 || !checkEnoughPlayers()) {
+	if(gameState != 0 || !goodEntries()) {
+		//~	probably send an error message describing what's wrong
 		return;
 	}
 	
@@ -42,11 +43,22 @@ function F5() {
 	let idInputs = document.getElementsByClassName("list-input-id"),
 		nameInputs = document.getElementsByClassName("list-input-name");
 	for(let i = 0; i < idInputs.length; i++) {
-		if(idInputs[i].value.trim().length == 0 || typeof Number(idInputs[i].value) == "NaN") continue;
+		let id = idInputs[i].value.trim(),
+			name = nameInputs[i].value.trim();
+		//if(idInputs[i].value.trim().length == 0 || typeof Number(idInputs[i].value) == "NaN") continue;
 		let fields = [],
 			values = [];
 		fields.push("id");
 		values.push(idInputs[i].value.trim());
+		if(nameInputs[i].value.trim().length > 0) {
+			fields.push("name");
+			values.push(nameInputs[i].value.trim());
+		}
+		fields.push("team");
+		fields.push(idInputs.getAttribute("class").indexOf("red") > -1 ? "red" : "green");
+		send(fvFormat(fields, values));
+		
+		/*
 		if(nameInputs[i].value.trim().length == 0) {
 			fields.push("dba");
 			values.push("query");
@@ -59,7 +71,7 @@ function F5() {
 			fields.push("name");
 			values.push(nameInputs[i].value.trim());
 		}
-		send(fvFormat(fields, values));
+		*/
 	}
 	
 	//send gameState update
@@ -71,11 +83,37 @@ function F5() {
 	}
 }
 
+function clock(seconds) {
+	let [mins, secs] = timeFromSeconds(seconds);
+	document.getElementById("clock").innerHTML = zero(mins, 2) + ":" + zero(secs, 2);
+}
+
+function state(message) {
+	document.getElementById("state").innerHTML = message;
+}
+function substate(message) {
+	document.getElementById("substate").innerHTML = message;
+}
+
 function log(message) {
 	let li = document.createElement("li");
 	li.setAttribute("class", "log-message");
 	li.innerHTML = message;
 	document.getElementById("log").appendChild(li);
+}
+
+function updateForGameState() {
+	switch(gameState) {
+		case 0:
+			state("Game inactive.");
+			break;
+		case 1:
+			state("Game starting soon!");
+			break;
+		case 2:
+			state("Game active!");
+			break;
+	}
 }
 
 window.onkeydown = (ev) => {

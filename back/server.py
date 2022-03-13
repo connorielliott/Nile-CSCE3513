@@ -1,14 +1,14 @@
 import json
 import socket
 import _thread			# https://stackoverflow.com/a/64402988
-import two_arrays.py	# thanks Benton
 
 
 localIP     = "127.0.0.1"
 localPort   = 20001
 bufferSize  = 1024
 address = None
-handler = None
+frontEndHandler = None
+networkingHandler = None
 
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -53,6 +53,10 @@ def log(message):
 def clock(seconds):
 	send("clock:{}".format(seconds))
 
+# send gamestate
+def updateGameState(gameState):
+	send("gameState:{}".format(gameState))
+
 
 # Listen for incoming datagrams
 def listen():
@@ -61,24 +65,29 @@ def listen():
 		# wait for message
 		bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 		message = bytesAddressPair[0]
-		message = str(message)[2:-1]
 		global address
-		address = bytesAddressPair[1]
+		if(address == None):
+			address = bytesAddressPair[1]
+		
+		#~differentiate between front-end messsages and network messages
+		# handle front-end messages
+		message = str(message)[2:-1]
 		print_msg = "[n->P]\t{}".format(message)
 		print(print_msg)
+		frontEndHandler(message)
 		
-		# handle messages
-		handler(str(message))
+		# handle networking messages
+		# networkingHandler(message)
 
 
 # start function, can pass in handler function from main.py
-def start(handler_funct):
-	global handler
-	handler = handler_funct
+def start(frontEndHandlerFunction, networkingHandlerFunction):
+	global frontEndHandler
+	global networkingHandler
+	frontEndHandler = frontEndHandlerFunction
+	networkingHandler = networkingHandlerFunction
 	try:
 		print("trying to start listening thread...")
 		_thread.start_new_thread(listen, ())
-		# keep this
-		send("Hello from Python Server")
 	except:
 		print("! failed to start listening thread")

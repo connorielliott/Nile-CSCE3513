@@ -1,4 +1,5 @@
 import os
+import time
 import webbrowser
 import _thread
 
@@ -29,9 +30,6 @@ if __name__ == "__main__":
 	# this already includes udp python server and database python file
 	run("./back/main.py")
 	
-	# open database python
-	#
-	
 	# open browser-python nodejs bridge
 	run("./middle/jsPyCommunicator.js")
 	
@@ -40,3 +38,7 @@ if __name__ == "__main__":
 	filestr = "file:///"
 	index_pathstr = os.path.realpath("./front/index.html")
 	webbrowser.open_new(filestr + index_pathstr)
+	
+	# don't weird out terminal
+	while True:
+		time.sleep(1)

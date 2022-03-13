@@ -24,7 +24,7 @@ html, body {
 #play-action-screen {
 	display: none;
 	grid-template-areas:
-		"pet pec pec"
+		"pet pes pec"
 		"pel per peg"
 		"pel pea pea"
 		"peb peb peb";
@@ -39,6 +39,9 @@ html, body {
 }
 .title-cont {
 	grid-area: pet;
+}
+.state-cont {
+	grid-area: pes;
 }
 .clock-cont {
 	grid-area: pec;

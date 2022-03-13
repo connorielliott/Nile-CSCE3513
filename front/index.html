@@ -32,11 +32,6 @@
 				<div>GREEN Team</div>
 				<div class="team-list" id="green-team-entry-list"></div>
 			</div>
-			
-			<div class="cont buttons-cont">
-				<button class="button f1-button" onclick="F1();">F1 to Clear Data</button>
-				<button class="button f5-button" onclick="F5();">F5 to Start Game</button>
-			</div>
 		</div>
 		
 		<!-- play action screen -->
@@ -45,31 +40,36 @@
 				<h1 id="title">Play Action</h1>
 			</div>
 			
+			<div class="cont state-cont">
+				<h1 id="state">Game Inactive</h1>
+				<h2 id="substate">-</h2>
+			</div>
+			
 			<div class="cont clock-cont">
 				<h1 id="clock">00:00</h1>
 			</div>
 			
-			<div class="cont info-cont">
+			<div class="cont log-cont">
 				<ul id="log"></ul>
 			</div>
 			
 			<div class="cont team-cont red-team-cont" id="red-team-action">
 				<div>RED Team</div>
-				<div class="team-list" id="red-team-action-list"></div>
+				<ul class="team-list" id="red-team-list"></ul>
 			</div>
 			<div class="cont team-cont green-team-cont" id="green-team-action">
 				<div>GREEN Team</div>
-				<div class="team-list" id="green-team-action-list"></div>
+				<ul class="team-list" id="green-team-list"></ul>
 			</div>
 			
 			<div class="cont action-cont">
 				<div class="action-list"></div>
 			</div>
-			
-			<div class="cont buttons-cont">
-				<button class="button f1-button" onclick="F1();">F1 to Switch to Player Entry Screen</button>
-				<button class="button f5-button" onclick="F5();" disabled>F5 to Start Game</button>
-			</div>
+		</div>
+		
+		<div class="cont buttons-cont">
+			<button class="button" id="f1-button" onclick="F1();">F1 to Clear Team Data</button>
+			<button class="button" id="f5-button" onclick="F5();">F5 to Start Game</button>
 		</div>
 	</body>
 </html>
