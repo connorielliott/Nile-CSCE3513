@@ -17,7 +17,7 @@ function fvFormat(fields, values) {
 }
 
 function checkEnoughPlayers() {
-	//test if player entry data is good
+	//test if player entry data is good enough to start game
 	let redIdInputs = document.getElementsByClassName("list-input-team-red"),
 		greenIdInputs = document.getElementsByClassName("list-input-team-green");
 	let redGood = false,
@@ -35,4 +35,12 @@ function checkEnoughPlayers() {
 		}
 	}
 	return redGood && greenGood;
+}
+
+function twoArrays(str) {
+	let result = [];
+	let pairs = str.split(",").map((e) => { return e.trim(); });
+	let fields = pairs.map((e) => { return e.substring(0, e.indexOf(":")); }),
+		values = pairs.map((e) => { return e.substring(e.indexOf(":") + 1); });
+	return [fields, values];
 }
