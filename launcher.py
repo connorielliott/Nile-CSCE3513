@@ -6,7 +6,7 @@ import _thread
 # distinguishes between .js and .py and runs node or python accordingly
 def open(x):
 	if x.strip()[-2:] == "py":
-		os.system("python {}".format(x))
+		os.system("py {}".format(x))
 	elif x.strip()[-2:] == "js":
 		os.system("node {}".format(x))
 	else:

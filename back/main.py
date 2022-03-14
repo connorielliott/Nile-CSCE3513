@@ -8,8 +8,8 @@ from database import DB
 # --- START --------------- Game Variables --------------- START ---
 
 gameState = 0
-
 gameDuration = 360		# Set game time duration variable
+
 database = DB()
 
 # will hold tuples (number id, string name)
@@ -22,15 +22,21 @@ greenTeam = []
 # --- START ------------ Game Countdown Timer ------------ START ---
 
 def startGame():
+	# open db
+	database.openDB()
+	
 	# send team player information to front-end
 	for player in redTeam:
 		name = processPlayer(player)
-		if (name != ""):
+		if name == False:
+			return
+		elif (name != ""):
 			server.inform(["name", "team"], [name, "red"])
 	for player in greenTeam:
 		name = processPlayer(player)
-		if name != "":
-
+		if name == False:
+			return
+		elif name != "":
 			server.inform(["name", "team"], [name, "green"])
 
 	# Game countdown timer begins here
@@ -130,7 +136,7 @@ def processPlayer(player):
 				updatePlayerName(id, name)
 		else:
 			server.invalidId(id)
-			return ""		
+			return False
 	return name
 
 def endGame():
@@ -142,6 +148,9 @@ def endGame():
 	# clear teams
 	redTeam = []
 	greenTeam = []
+	
+	# close db
+	database.closeDB()
 
 # ---- END --------------- Extra Game Stuff --------------- END ----
 
@@ -150,12 +159,6 @@ def endGame():
 
 # must be before all server.send(<str>) usages since this gets the address of the bridge
 server.start(messageHandler.frontEndHandler, messageHandler.networkingHandler)
-database.openDB()
-
-#Run code between the open database and close database that way 
-
-database.closeDB()
-
 
 
 # ---- END ---------------- Main Function ----------------- END ----

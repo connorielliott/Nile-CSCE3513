@@ -117,6 +117,11 @@ function addPlayer(name, team) {
 	document.getElementById(team + "-team-list").appendChild(li);
 }
 
+function clearPlayers() {
+	document.getElementById("red-team-list").innerHTML = "";
+	document.getElementById("green-team-list").innerHTML = "";
+}
+
 function highlight(id) {
 	let idInputs = document.getElementsByClassName("list-input-id");
 	for(let i = 0; i < idInputs.length; i++) {
