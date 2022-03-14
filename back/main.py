@@ -22,10 +22,12 @@ def startGame():
 	# send team player information to front-end
 	for player in redTeam:
 		name = processPlayer(player)
-		server.inform(["name", "team"], [name, "red"])
+		if(name != ""):
+			server.inform(["name", "team"], [name, "red"])
 	for player in greenTeam:
 		name = processPlayer(player)
-		server.inform(["name", "team"], [name, "green"])
+		if(name != ""):
+			server.inform(["name", "team"], [name, "green"])
 	
 	# Game countdown timer begins here
 	gameState = 1
@@ -119,7 +121,7 @@ def processPlayer(player):
 		if(playerExists(id)):
 			name = getPlayerName(id)
 		else:
-			continue
+			return ""
 	if(playerExists(id) and name != ""):
 		# update entry
 		updatePlayerName(id, name)

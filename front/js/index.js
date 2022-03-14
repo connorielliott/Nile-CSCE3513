@@ -39,20 +39,18 @@ function F5() {
 	}
 	
 	//send user infos
-	//~	make better checks for valid player entry data
 	let idInputs = document.getElementsByClassName("list-input-id"),
 		nameInputs = document.getElementsByClassName("list-input-name");
 	for(let i = 0; i < idInputs.length; i++) {
 		let id = idInputs[i].value.trim(),
 			name = nameInputs[i].value.trim();
-		//if(idInputs[i].value.trim().length == 0 || typeof Number(idInputs[i].value) == "NaN") continue;
 		let fields = [],
 			values = [];
 		fields.push("id");
-		values.push(idInputs[i].value.trim());
+		values.push(id);
 		if(nameInputs[i].value.trim().length > 0) {
 			fields.push("name");
-			values.push(nameInputs[i].value.trim());
+			values.push(name);
 		}
 		fields.push("team");
 		fields.push(idInputs.getAttribute("class").indexOf("red") > -1 ? "red" : "green");
@@ -100,6 +98,11 @@ function log(message) {
 	li.setAttribute("class", "log-message");
 	li.innerHTML = message;
 	document.getElementById("log").appendChild(li);
+	li.scrollIntoView();
+}
+
+function addPlayer(name, team) {
+	//
 }
 
 function updateForGameState() {

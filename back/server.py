@@ -57,6 +57,9 @@ def clock(seconds):
 def updateGameState(gameState):
 	send("gameState:{}".format(gameState))
 
+# invalid id message
+def invalidId(id):
+	send("invalid:{}".format(id))
 
 # Listen for incoming datagrams
 def listen():
