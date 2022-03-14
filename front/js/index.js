@@ -65,23 +65,8 @@ function F5() {
 			values.push(name);
 		}
 		fields.push("team");
-		fields.push(idInputs.getAttribute("class").indexOf("red") > -1 ? "red" : "green");
+		fields.push(idInputs[i].getAttribute("class").indexOf("red") > -1 ? "red" : "green");
 		send(fvFormat(fields, values));
-		
-		/*
-		if(nameInputs[i].value.trim().length == 0) {
-			fields.push("dba");
-			values.push("query");
-			fields.push("query");
-			values.push("name");
-		}
-		else {
-			fields.push("dba");
-			values.push("modify");
-			fields.push("name");
-			values.push(nameInputs[i].value.trim());
-		}
-		*/
 	}
 	
 	//send gameState update

@@ -59,7 +59,6 @@ def startGame():
 
 # --- START ----------------- Game Loop ------------------ START ---
 
-#~maybe reorganize this?
 def gameLoop():
 	# Gametime takes place here
 	gameTime = gameDuration
@@ -120,7 +119,6 @@ def addPlayerToTeam(player, team):
 	elif team == "green":
 		greenTeam.append(player)
 
-#~check if this is fine, my brain is starting to hurt
 def processPlayer(player):
 	id = player[0]
 	name = player[1]
