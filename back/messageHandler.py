@@ -7,8 +7,9 @@ playerList = []
 # handle front-end messages
 def frontEnd(msg):
 	# parse message
-	fields = two_arrays.two_arrays(msg)[0]
-	values = two_arrays.two_arrays(msg)[1]
+	parsed = two_arrays.two_arrays(msg)
+	fields = parsed[0]
+	values = parsed[1]
 	
 	# interpret messages
 	id = -1

@@ -154,6 +154,8 @@ def endGame():
 	server.log("Game over")
 	
 	# clear teams
+	global redTeam
+	global greenTeam
 	redTeam = []
 	greenTeam = []
 	
