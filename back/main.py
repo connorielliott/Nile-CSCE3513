@@ -2,13 +2,14 @@ import time
 # these are ours
 import messageHandler
 import server
+from database import DB
 
 
 # --- START --------------- Game Variables --------------- START ---
 
 gameState = 0
 gameDuration = 360		# Set game time duration variable
-
+database = DB()
 # will hold tuples (number id, string name)
 redTeam = []
 greenTeam = []
@@ -22,10 +23,12 @@ def startGame():
 	# send team player information to front-end
 	for player in redTeam:
 		name = processPlayer(player)
-		server.inform(["name", "team"], [name, "red"])
+		if (name != ""):
+			server.inform(["name", "team"], [name, "red"])
 	for player in greenTeam:
 		name = processPlayer(player)
-		server.inform(["name", "team"], [name, "green"])
+		if name != "":
+			server.inform(["name", "team"], [name, "green"])
 	
 	# Game countdown timer begins here
 	gameState = 1
@@ -80,21 +83,22 @@ def gameLoop():
 
 def playerExists(id):
 	# determine if this player exists in the database
-	return True
+	return database.searchID(id)
 
 def addPlayerToDatabase(name):
 	# add new entry to database with this name. return id of new entry
-	id = -1
-	print("added name={n} with id={i}".format(n=name, i=id))
+	id = database.maxID() + 1
+	database.insertPlayer(id,name,0)
 	return id
 
 def getPlayerName(id):
 	# get player name from id
-	return "what"
+	return database.retrieveName(id)
 
 def updatePlayerName(id, name):
 	# obvious
-	print("updated id={i} to have name={n}".format(i=id, n=name))
+	database.updateName(id,name)
+
 
 # ---- END ---------------- Database Stuff ---------------- END ----
 
@@ -119,7 +123,7 @@ def processPlayer(player):
 		if(playerExists(id)):
 			name = getPlayerName(id)
 		else:
-			continue
+			return ""
 	if(playerExists(id) and name != ""):
 		# update entry
 		updatePlayerName(id, name)
@@ -142,10 +146,12 @@ def endGame():
 
 # must be before all server.send(<str>) usages since this gets the address of the bridge
 server.start(messageHandler.frontEndHandler, messageHandler.networkingHandler)
+database.openDB()
 
-# do other things
-# if necessary
-time.sleep(10)
-startGame()
+#Run code between the open database and close database that way 
+
+database.closeDB()
+
+
 
 # ---- END ---------------- Main Function ----------------- END ----
