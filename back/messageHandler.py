@@ -1,12 +1,14 @@
 import server
 import two_arrays
+from main import startGame, addPlayerToTeam
 
 playerList = []
 
 # handle front-end messages
-def frontEndHandler(msg):
+def frontEnd(msg):
 	# parse message
-	fields, values = two_arrays.two_arrays(msg)
+	fields = two_arrays.two_arrays(msg)[0]
+	values = two_arrays.two_arrays(msg)[1]
 	
 	# interpret messages
 	id = -1
@@ -26,7 +28,7 @@ def frontEndHandler(msg):
 		# the only possible messages are for player entry and to start the game
 		# both of these are only possible when gamestate is 0
 		if field == "id":
-			id = Number(value)
+			id = int(value)
 		elif field == "name":
 			name = value
 		elif field == "team":
@@ -38,6 +40,9 @@ def frontEndHandler(msg):
 			startGame()
 
 # handle networking messages
-def networkingHandler(msg):
+def networking(msg):
 	# to be implemented
 	print("handling network messages dutifully.")
+
+# must be before all server.send(<str>) usages since this gets the address of the bridge
+server.start(frontEnd, networking)

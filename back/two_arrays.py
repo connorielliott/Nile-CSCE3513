@@ -27,7 +27,7 @@ def two_arrays(str):
                 array_switch = False
         index += 1
 
-    return temparray1, temparray2
+    return [temparray1, temparray2]
 
 # test code
 # str = "abc:123, def:456, ghi:789"

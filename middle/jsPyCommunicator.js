@@ -49,14 +49,16 @@ io.on("connection", (socket) => {
 function sendToPython(data) {
 	if(DEBUG) console.log(`[N->p]\t${data}`);
 	client.send(Buffer.from(data.toString()), 20001, "127.0.0.1", (err) => {
-		if(err){}	//don't care
+		if(err) {
+			console.log("! failed to send message to python");
+		}
 	});
 }
 
 //python send
 //do not remove, this gives the python server an address to hold on to and use
 setTimeout(() => {
-	sendToPython(`Hello from NodeJS`);
+	sendToPython(`from:nodejs`);
 }, 1000);
 
 //python listen

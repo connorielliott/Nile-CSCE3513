@@ -2,7 +2,7 @@ import time
 # these are ours
 import messageHandler
 import server
-from database import DB
+#from database import DB
 
 
 # --- START --------------- Game Variables --------------- START ---
@@ -10,7 +10,7 @@ from database import DB
 gameState = 0
 gameDuration = 360		# Set game time duration variable
 
-database = DB()
+#database = DB()
 
 # will hold tuples (number id, string name)
 redTeam = []
@@ -23,7 +23,7 @@ greenTeam = []
 
 def startGame():
 	# open db
-	database.openDB()
+	#database.openDB()
 	
 	# send team player information to front-end
 	for player in redTeam:
@@ -123,19 +123,29 @@ def processPlayer(player):
 	id = player[0]
 	name = player[1]
 	if(id == -1):
-		# new player
-		id = addPlayerToDatabase(name)
+		if(name != ""):
+			# new player
+			id = addPlayerToDatabase(name)
+			return name
+		else:
+			return ""
 	if(name == ""):
 		# retrieve name with id if possible, otherwise do not add this player to the teams
 		if(playerExists(id)):
 			name = getPlayerName(id)
-			if(name != ""):
-				# update entry
-				updatePlayerName(id, name)
+			return name
 		else:
 			server.invalidId(id)
 			return False
-	return name
+	else:
+		if(playerExists(id)):
+			# update entry if possible
+			updatePlayerName(id, name)
+			return name
+		else:
+			addPlayerToDatabase(name)
+			return name
+	return ""
 
 def endGame():
 	# end game
@@ -148,15 +158,13 @@ def endGame():
 	greenTeam = []
 	
 	# close db
-	database.closeDB()
+	#database.closeDB()
 
 # ---- END --------------- Extra Game Stuff --------------- END ----
 
 
 # --- START --------------- Main Function ---------------- START ---
 
-# must be before all server.send(<str>) usages since this gets the address of the bridge
-server.start(messageHandler.frontEndHandler, messageHandler.networkingHandler)
 
 
 # ---- END ---------------- Main Function ----------------- END ----

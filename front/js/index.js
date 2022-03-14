@@ -56,16 +56,17 @@ function F5() {
 	for(let i = 0; i < idInputs.length; i++) {
 		let id = idInputs[i].value.trim(),
 			name = nameInputs[i].value.trim();
+		if(!goodEntry(id, name)) continue;
 		let fields = [],
 			values = [];
 		fields.push("id");
 		values.push(id);
-		if(nameInputs[i].value.trim().length > 0) {
+		if(name.length > 0) {
 			fields.push("name");
 			values.push(name);
 		}
 		fields.push("team");
-		fields.push(idInputs[i].getAttribute("class").indexOf("red") > -1 ? "red" : "green");
+		values.push(idInputs[i].getAttribute("class").indexOf("red") > -1 ? "red" : "green");
 		send(fvFormat(fields, values));
 	}
 	

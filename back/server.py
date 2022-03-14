@@ -69,14 +69,12 @@ def listen():
 		bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 		message = bytesAddressPair[0]
 		global address
-		if(address == None):
-			address = bytesAddressPair[1]
+		address = bytesAddressPair[1]
 		
 		#~differentiate between front-end messsages and network messages
 		# handle front-end messages
 		message = str(message)[2:-1]
-		print_msg = "[n->P]\t{}".format(message)
-		print(print_msg)
+		print("[n->P]\t{}".format(message))
 		frontEndHandler(message)
 		
 		# handle networking messages
@@ -90,7 +88,8 @@ def start(frontEndHandlerFunction, networkingHandlerFunction):
 	frontEndHandler = frontEndHandlerFunction
 	networkingHandler = networkingHandlerFunction
 	try:
-		print("trying to start listening thread...")
-		_thread.start_new_thread(listen, ())
-	except:
-		print("! failed to start listening thread")
+		print("starting listening thread...")
+		listen()
+	except Exception as e:
+		print("! failed listening thread:")
+		print(e)
