@@ -8,6 +8,11 @@ Install node.js: https://nodejs.org/en/download/
 
 For the other requirements, use install.sh
   - run `source install.sh` from root directory.
+  - Packages/modules used:
+    - wheel
+    - psycopg2
+    - wxPython
+    - socket.io
 
 
 
