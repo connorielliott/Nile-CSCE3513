@@ -26,6 +26,9 @@ socket.on("data", (data) => {
 				gameState = Number(value);
 				updateForGameState();
 				break;
+			case "invalid":
+				highlight(Number(value));
+				break;
 			case "log":
 				log(value);
 				break;

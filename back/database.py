@@ -28,9 +28,9 @@ class DB:
 		else:
 			print("Open Database first")
 	
-	def insertPlayer(self,id,first_name,last_name,codename):
-		query =  "INSERT INTO player (id, first_name, last_name, codename) VALUES (%s, %s, %s, %s);"
-		data = (id, first_name, last_name, codename)
+	def insertPlayer(self,id,codename,score):
+		query =  "INSERT INTO player (id, codename, score) VALUES (%s, %s, %s);"
+		data = (id,codename, score)
 		self.cursor.execute(query, data)
 		self.connection.commit()
 		
@@ -46,3 +46,22 @@ class DB:
 			else:
 				print("Record does not exists")
 				return False
+	
+	def maxID(self):
+		query = "SELECT max(id) from player group by id limit 1;"
+		self.cursor.execute(query)
+		retrieve = self.cursor.fetchall()
+		for row in retrieve:
+			return row[0]
+	
+	def retrieveName(self,id):
+		query = "SELECT codename FROM player where id = " + str(id) + ";"
+		self.cursor.execute(query)
+		retrieve = self.cursor.fetchall()
+		for row in retrieve:
+			return row[0]
+	
+	def updateName(self,id,codename):
+		query = "UPDATE player SET codename = \'" + codename + "\' WHERE id = " + str(id) + ";"
+		self.cursor.execute(query)
+		self.connection.commit()
