@@ -2,7 +2,7 @@ import time
 # these are ours
 import messageHandler
 import server
-#from database import DB
+from database import DB
 
 
 # --- START --------------- Game Variables --------------- START ---
@@ -10,7 +10,7 @@ import server
 gameState = 0
 gameDuration = 360		# Set game time duration variable
 
-#database = DB()
+database = DB()
 
 # will hold tuples (number id, string name)
 redTeam = []
@@ -23,7 +23,7 @@ greenTeam = []
 
 def startGame():
 	# open db
-	#database.openDB()
+	database.openDB()
 	
 	# send team player information to front-end
 	for player in redTeam:
@@ -158,7 +158,7 @@ def endGame():
 	greenTeam = []
 	
 	# close db
-	#database.closeDB()
+	database.closeDB()
 
 # ---- END --------------- Extra Game Stuff --------------- END ----
 
