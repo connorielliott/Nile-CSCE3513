@@ -9,12 +9,25 @@ function goodEntry(idValue, nameValue) {
 
 function goodEntries() {
 	//see if each team has at least one good entry
-	//
-	//for(let i = 0; i < .length; i++) {
-	//	if(goodEntry(i))
-	//}
-	//return redGood && greenGood;
-	return true;
+	let redIdInputs = document.getElementsByClassName("list-input-id-red"),
+		greenIdInputs = document.getElementsByClassName("list-input-id-green"),
+		redNameInputs = document.getElementsByClassName("list-input-name-red"),
+		greenNameInputs = document.getElementsByClassName("list-input-name-green");
+	let redGood = false,
+		greenGood = false;
+	for(let i = 0; i < redIdInputs.length; i++) {
+		if(goodEntry(redIdInputs[i].value, redNameInputs[i].value)) {
+			redGood = true;
+			break;
+		}
+	}
+	for(let i = 0; i < greenIdInputs.length; i++) {
+		if(goodEntry(greenIdInputs[i].value, greenNameInputs[i].value)) {
+			greenGood = true;
+			break;
+		}
+	}
+	return redGood && greenGood;
 }
 
 function fvFormat(fields, values) {

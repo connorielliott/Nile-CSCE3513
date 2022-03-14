@@ -7,7 +7,7 @@ import server
 # --- START --------------- Game Variables --------------- START ---
 
 gameState = 0
-gameDuration = 360		# Set game time duration variable
+gameDuration = 36		# Set game time duration variable
 
 # will hold tuples (number id, string name)
 redTeam = []
@@ -61,19 +61,19 @@ def gameLoop():
 		# decrement time
 		time.sleep(1)
 		gameTime = gameTime - 1
-		server.clock(gameTime);
+		server.clock(gameTime)
 		
 		# time warnings
 		if(gameTime == 60):
 			# One minute warning
 			server.log("Warning: 1 minute remaining")
+		elif(gameTime <= 0):
+			endGame()
 		elif(gameTime <= 30):
 			# End of game countdown
 			if(gameTime == 30):
 				server.log("Game ending in t-minus")
 			server.log("{} seconds".format(gameTime))
-		elif(gameTime <= 0):
-			endGame()
 
 # ---- END ------------------ Game Loop ------------------- END ----
 

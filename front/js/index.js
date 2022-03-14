@@ -1,7 +1,20 @@
 var gameState = 0;
 var currentScreenId = "player-entry-screen";
+var f1Good = true,
+	f5Good = true;
 
 function switchToScreen(id) {
+	switch(id) {
+		case "player-entry-screen":
+			modButton("f1", "Clear Team Data");
+			modButton("f5", "Start Game");
+			break;
+		case "play-action-screen":
+			modButton("f1", "Return to Player Entry Screen");
+			modButton("f5", "Do Nothing");
+			break;
+	}
+	if(id == currentScreenId) return;
 	let screens = document.getElementsByClassName("screen");
 	for(let i = 0; i < screens.length; i++) {
 		if(screens[i].id !== id) {
@@ -23,7 +36,7 @@ function clearInputs() {
 function F1() {
 	//when gamestate is 0, switch to player entry screen
 	//if already on this screen, clear player entry data
-	if(gameState != 0) return;
+	if(!f1Good || gameState != 0) return;
 	if(currentScreenId === "player-entry-screen") {
 		clearInputs();
 	}
@@ -33,8 +46,7 @@ function F1() {
 function F5() {
 	//when gamestate is 0, check if player entries are valid and switch gamestate to 1 if good
 	//also switch to play action screen
-	if(gameState != 0 || !goodEntries()) {
-		//~	probably send an error message describing what's wrong
+	if(!f5Good || gameState != 0 || !goodEntries()) {
 		return;
 	}
 	
@@ -74,16 +86,13 @@ function F5() {
 	
 	//send gameState update
 	send("gameState:1");
-	
-	//switch to play action screen
-	if(currentScreenId !== "play-action-screen") {
-		switchToScreen("play-action-screen");
-	}
 }
 
 function clock(seconds) {
 	let [mins, secs] = timeFromSeconds(seconds);
 	document.getElementById("clock").innerHTML = zero(mins, 2) + ":" + zero(secs, 2);
+	//for auto-switch to play action screen if disconnected
+	switchToScreen("play-action-screen");
 }
 
 function state(message) {
@@ -102,19 +111,64 @@ function log(message) {
 }
 
 function addPlayer(name, team) {
-	//
+	let li = document.createElement("li");
+	li.setAttribute("class", "player " + team + "-player");
+	li.innerHTML = name;
+	document.getElementById(team + "-team-list").appendChild(li);
+}
+
+function highlight(id) {
+	let idInputs = document.getElementsByClassName("list-input-id");
+	for(let i = 0; i < idInputs.length; i++) {
+		if(Number(idInputs[i].value.trim()) == id) {
+			//~	more animation here or smth
+			idInputs[i].focus();
+			alert("Please check this id and name pair.");
+		}
+	}
+}
+
+function enableButton(f) {
+	document.getElementById(f + "-button").removeAttribute("disabled");
+	switch(f) {
+		case "f1":
+			f1Good = true;
+			break;
+		case "f5":
+			f5Good = true;
+			break;
+	}
+}
+function disableButton(f) {
+	document.getElementById(f + "-button").setAttribute("disabled", "");
+	switch(f) {
+		case "f1":
+			f1Good = false;
+			break;
+		case "f5":
+			f5Good = false;
+			break;
+	}
+}
+function modButton(f, actionMessage) {
+	document.getElementById(f + "-button").innerHTML = f.toUpperCase() + " to " + actionMessage;
 }
 
 function updateForGameState() {
 	switch(gameState) {
 		case 0:
-			state("Game inactive.");
+			state("Game Inactive.");
+			enableButton("f1");
+			enableButton("f5");
 			break;
 		case 1:
-			state("Game starting soon!");
+			state("Game Starting Soon!");
+			disableButton("f1");
+			disableButton("f5");
+			switchToScreen("play-action-screen");
 			break;
 		case 2:
-			state("Game active!");
+			state("Game Active!");
 			break;
 	}
 }
