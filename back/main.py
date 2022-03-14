@@ -25,7 +25,7 @@ def startGame():
 	# open db
 	database.openDB()
 	
-	# send team player information to front-end
+	# send team player information to front-ends
 	for player in redTeam:
 		name = processPlayer(player)
 		if name == False:

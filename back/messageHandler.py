@@ -13,7 +13,6 @@ def frontEnd(msg):
 	# interpret messages
 	id = -1
 	name = ""
-	team = ""
 	stopIndex = max(len(fields), len(values))
 	for i in range(0, stopIndex):
 		if i < len(fields):
@@ -24,7 +23,7 @@ def frontEnd(msg):
 			value = values[i]
 		else:
 			value = ""
-		
+
 		# the only possible messages are for player entry and to start the game
 		# both of these are only possible when gamestate is 0
 		if field == "id":
@@ -32,10 +31,9 @@ def frontEnd(msg):
 		elif field == "name":
 			name = value
 		elif field == "team":
-			addPlayerToTeam((id, name), team)
+			addPlayerToTeam((id, name), value)
 			id = -1
 			name = ""
-			team = ""
 		elif field == "gameState" and value == "1":
 			startGame()
 
