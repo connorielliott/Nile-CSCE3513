@@ -1,18 +1,28 @@
+function goodEntry(idValue, nameValue) {
+	//just makes sure that only one box can be empty
+	//and that id, if provided, is a number
+	if(idValue.length == 0) {
+		return nameValue.length != 0;
+	}
+	return typeof Number(idValue) != "NaN";
+}
+
 function goodEntries() {
-	//~	test if player entry data is good enough to start game
-	//atm it only tests if there's at least 1 entry per team with number in id box
+	//see if each team has at least one good entry
 	let redIdInputs = document.getElementsByClassName("list-input-id-red"),
-		greenIdInputs = document.getElementsByClassName("list-input-id-green");
+		greenIdInputs = document.getElementsByClassName("list-input-id-green"),
+		redNameInputs = document.getElementsByClassName("list-input-name-red"),
+		greenNameInputs = document.getElementsByClassName("list-input-name-green");
 	let redGood = false,
 		greenGood = false;
 	for(let i = 0; i < redIdInputs.length; i++) {
-		if(redIdInputs[i].value.length == 0 || typeof Number(redIdInputs[i].value) == "NaN") {
+		if(goodEntry(redIdInputs[i].value, redNameInputs[i].value)) {
 			redGood = true;
 			break;
 		}
 	}
 	for(let i = 0; i < greenIdInputs.length; i++) {
-		if(greenIdInputs[i].value.length == 0 || typeof Number(greenIdInputs[i].value) == "NaN") {
+		if(goodEntry(greenIdInputs[i].value, greenNameInputs[i].value)) {
 			greenGood = true;
 			break;
 		}

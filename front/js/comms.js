@@ -5,21 +5,6 @@ function send(data) {
 	socket.emit("data", data);
 }
 
-function handle(field, value) {
-	switch(field) {
-		case "clock":
-			clock(Number(value));
-			break;
-		case "gameState":
-			gameState = Number(value);
-			updateForGameState();
-			break;
-		case "log":
-			log(value);
-			break;
-	}
-}
-
 socket.on("data", (data) => {
 	console.log("[n->B]\t" + data);
 	
@@ -28,9 +13,34 @@ socket.on("data", (data) => {
 	
 	//do stuff
 	let stopIndex = Math.max(fields.length, values.length);
+	let name = "",
+		team = "";
 	for(let i = 0; i < stopIndex; i++) {
 		let field = i < fields.length ? fields[i] : "";
 		let value = i < values.length ? values[i] : "";
-		handle(field, value);
+		switch(field) {
+			case "clock":
+				clock(Number(value));
+				break;
+			case "gameState":
+				gameState = Number(value);
+				updateForGameState();
+				break;
+			case "invalid":
+				highlight(Number(value));
+				break;
+			case "log":
+				log(value);
+				break;
+			case "name":
+				name = value;
+				break;
+			case "team":
+				team = value;
+				addPlayer(name, team);
+				name = "";
+				team = "";
+				break;
+		}
 	}
 });
