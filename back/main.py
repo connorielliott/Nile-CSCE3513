@@ -32,7 +32,7 @@ def startGame():
 		if name != "":
 
 			server.inform(["name", "team"], [name, "green"])
-	
+
 	# Game countdown timer begins here
 	gameState = 1
 	server.updateGameState(gameState)
@@ -71,7 +71,7 @@ def gameLoop():
 		if(gameTime == 60):
 			# One minute warning
 			server.log("Warning: 1 minute remaining")
-		elif(gameTime <= 0):
+		elif (gameTime <= 0):
 			endGame()
 		elif(gameTime <= 30):
 			# End of game countdown
@@ -125,11 +125,12 @@ def processPlayer(player):
 		# retrieve name with id if possible, otherwise do not add this player to the teams
 		if(playerExists(id)):
 			name = getPlayerName(id)
+			if(name != ""):
+				# update entry
+				updatePlayerName(id, name)
 		else:
-			return ""
-	if(playerExists(id) and name != ""):
-		# update entry
-		updatePlayerName(id, name)
+			server.invalidId(id)
+			return ""		
 	return name
 
 def endGame():
