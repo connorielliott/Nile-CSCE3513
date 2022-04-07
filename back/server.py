@@ -4,7 +4,9 @@ import _thread			# https://stackoverflow.com/a/64402988
 
 
 localIP     = "127.0.0.1"
-localPort   = 20001
+# localPort   = 20001
+recv_port = 7501
+broadcast_port = 7500
 bufferSize  = 1024
 address = None
 frontEndHandler = None
@@ -14,7 +16,7 @@ networkingHandler = None
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Bind to address and ip
-UDPServerSocket.bind((localIP, localPort))
+UDPServerSocket.bind((localIP, recv_port))
 
 
 # send raw message
@@ -25,7 +27,7 @@ def send(message):
 	message = str(message)
 	print_msg = "[P->n]\t{}".format(message)
 	print(print_msg)
-	UDPServerSocket.sendto(str.encode(message), address)
+	UDPServerSocket.sendto(str.encode(message), broadcast_port)
 
 # send information (field:value,field:value,...)
 def inform(field_array, value_array):
@@ -68,17 +70,19 @@ def listen():
 		# wait for message
 		bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 		message = bytesAddressPair[0]
-		global address
+		# global address
 		address = bytesAddressPair[1]
-		
-		#~differentiate between front-end messsages and network messages
-		# handle front-end messages
+
 		message = str(message)[2:-1]
 		print("[n->P]\t{}".format(message))
-		frontEndHandler(message)
 		
-		# handle networking messages
-		# networkingHandler(message)
+		if('0'<= message[0] and message[0] <= '9'):
+			print("integer message")
+			# networking(message)
+		else:
+			print("string message")
+			# frontEnd(message)
+
 
 
 # start function, can pass in handler function from main.py

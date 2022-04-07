@@ -41,6 +41,7 @@ def frontEnd(msg):
 def networking(msg):
 	# to be implemented
 	print("handling network messages dutifully.")
+	print(f"message sent from client: {msg}")
 
 # must be before all server.send(<str>) usages since this gets the address of the bridge
 server.start(frontEnd, networking)
