@@ -5,12 +5,7 @@ import _thread
 
 # distinguishes between .js and .py and runs node or python accordingly
 def open(x):
-	if x.strip()[-2:] == "py":
-		os.system("python {}".format(x))
-	elif x.strip()[-2:] == "js":
-		os.system("node {}".format(x))
-	else:
-		os.system(x)
+	os.system("python {}".format(x))
 
 # run in new thread
 def run(x):
@@ -29,9 +24,6 @@ if __name__ == "__main__":
 	# open game master python program
 	# this already includes udp python server and database python file
 	run("./back/main.py")
-	
-	# open browser-python nodejs bridge
-	run("./middle/jsPyCommunicator.js")
 	
 	# open html gui (https://stackoverflow.com/a/40905794)
 	print("opening web browser...")

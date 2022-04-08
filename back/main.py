@@ -1,7 +1,6 @@
 import time
 # these are ours
-import messageHandler
-import server
+import frontEnd
 from database import DB
 
 
@@ -31,27 +30,27 @@ def startGame():
 		if name == False:
 			return
 		elif (name != ""):
-			server.inform(["name", "team"], [name, "red"])
+			frontEnd.inform(["name", "team"], [name, "red"])
 	for player in greenTeam:
 		name = processPlayer(player)
 		if name == False:
 			return
 		elif name != "":
-			server.inform(["name", "team"], [name, "green"])
+			frontEnd.inform(["name", "team"], [name, "green"])
 
 	# Game countdown timer begins here
 	gameState = 1
-	server.updateGameState(gameState)
-	server.log("Begin game in t-minus")
+	frontEnd.updateGameState(gameState)
+	frontEnd.log("Begin game in t-minus")
 	for i in range(10, 0, -1):
-		server.clock(i)
-		server.log("{} seconds".format(i))
+		frontEnd.clock(i)
+		frontEnd.log(f"{i} seconds")
 		time.sleep(1)
 	
 	#Starts game
 	gameState = 2
-	server.updateGameState(gameState)
-	server.log("Starting Game")
+	frontEnd.updateGameState(gameState)
+	frontEnd.log("Starting Game")
 	gameLoop()
 
 # ---- END ------------- Game Countdown Timer ------------- END ----
@@ -62,7 +61,7 @@ def startGame():
 def gameLoop():
 	# Gametime takes place here
 	gameTime = gameDuration
-	server.clock(gameTime)
+	frontEnd.clock(gameTime)
 	while(gameTime > 0):
 		# do things
 		# if necessary
@@ -70,19 +69,19 @@ def gameLoop():
 		# decrement time
 		time.sleep(1)
 		gameTime = gameTime - 1
-		server.clock(gameTime)
+		frontEnd.clock(gameTime)
 		
 		# time warnings
 		if(gameTime == 60):
 			# One minute warning
-			server.log("Warning: 1 minute remaining")
+			frontEnd.log("Warning: 1 minute remaining")
 		elif (gameTime <= 0):
 			endGame()
 		elif(gameTime <= 30):
 			# End of game countdown
 			if(gameTime == 30):
-				server.log("Game ending in t-minus")
-			server.log("{} seconds".format(gameTime))
+				frontEnd.log("Game ending in t-minus")
+			frontEnd.log(f"{gameTime} seconds")
 
 # ---- END ------------------ Game Loop ------------------- END ----
 
@@ -135,7 +134,7 @@ def processPlayer(player):
 			name = getPlayerName(id)
 			return name
 		else:
-			server.invalidId(id)
+			frontEnd.invalidId(id)
 			return False
 	else:
 		if(playerExists(id)):
@@ -150,8 +149,8 @@ def processPlayer(player):
 def endGame():
 	# end game
 	gameState = 0
-	server.updateGameState(gameState)
-	server.log("Game over")
+	frontEnd.updateGameState(gameState)
+	frontEnd.log("Game over")
 	
 	# clear teams
 	redTeam = []

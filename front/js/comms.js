@@ -1,12 +1,12 @@
 const socket = io("http://127.0.0.1:8000");
 
 function send(data) {
-	console.log("[B->n]\t" + data);
+	console.log("[B->p]\t" + data);
 	socket.emit("data", data);
 }
 
 socket.on("data", (data) => {
-	console.log("[n->B]\t" + data);
+	console.log("[p->B]\t" + data);
 	
 	//interpret message
 	let [fields, values] = twoArrays(data);
