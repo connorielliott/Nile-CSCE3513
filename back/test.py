@@ -1,4 +1,41 @@
-import eventlet
+class Hermes:
+	def __init__(self):
+		pass
+	
+	def send(x):
+		print(x)
+
+def server(handler):
+	value = "a message from outside came"
+	handler(value)
+
+def start():
+	hermes.send("hello")
+
+server()
+
+
+'''
+things = [lambda x: print(f"original {x}")]
+
+def changeFunct(funct):
+	global things
+	things[0] = funct
+
+def user():
+	def use(x):
+		things[0](x)
+	use("hello")
+
+def main():
+	user()
+
+changeFunct(lambda x: print(f"new {x}"))
+
+main()
+'''
+
+'''import eventlet
 import socketio
 
 sio = socketio.Server(cors_allowed_origins="*")
@@ -16,3 +53,4 @@ def receiveFromFrontEnd(sid, data):
 	print("data", data)
 
 eventlet.wsgi.server(eventlet.listen(("", 8000)), app)
+'''

@@ -1,6 +1,6 @@
 import time
 # these are ours
-from frontEnd import initHermes
+from frontEnd import Hermes
 from database import DB
 import two_arrays
 
@@ -22,8 +22,6 @@ greenTeam = []
 # --- START ------------ Game Countdown Timer ------------ START ---
 
 def startGame():
-	global hermes
-	
 	# open db
 	database.openDB()
 	
@@ -188,7 +186,7 @@ def frontEndHandler(msg):
 			value = values[i]
 		else:
 			value = ""
-
+	
 		# the only possible messages are for player entry and to start the game
 		# both of these are only possible when gamestate is 0
 		if field == "id":
@@ -218,7 +216,7 @@ def trafficHandler(msg):
 # --- START --------------- Main Function ---------------- START ---
 
 # hermes is the messenger to the front-end
-hermes = initHermes(frontEndHandler)
+hermes = Hermes(frontEndHandler)
 # IF PYTHON HAD FUCKING FUNCTION HOISTING I WOULD NOT HAVE SPENT 5 HOURS TRYING TO FIX THIS SHITTY CIRCULAR IMPORT PROBLEM
 
 # ---- END ---------------- Main Function ----------------- END ----
