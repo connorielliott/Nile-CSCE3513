@@ -8,33 +8,6 @@ import socketio
 DEBUG = True
 
 class Hermes:
-	def __init__(self, handler):
-		sio = socketio.Server(cors_allowed_origins="*")
-		app = socketio.WSGIApp(sio)
-		
-		@sio.event
-		def connect(sid, environ, auth):
-			print("browser connected")
-			if(DEBUG):
-				sio.emit("Hello from Python")
-		
-		@sio.event
-		def data(sid, x):
-			if(DEBUG):
-				print(f"[b->P]\t{x}")
-			handler(x)
-			#~	you were here, i think there's an issue of scope / closure
-			#	where this frontEndHandler function is called in this context
-			#	where hermes isn't defined
-		
-		@sio.event
-		def disconnect(sid):
-			print("! browser disconnected")
-		
-		eventlet.wsgi.server(eventlet.listen(("", 8000)), app)
-		
-		self.sio = sio
-	
 	# send raw message
 	def send(self, message):
 		message = str(message)
@@ -59,22 +32,48 @@ class Hermes:
 			if i < stop_index - 1:
 				message += ","
 		self.send(message)
-
+	
 	# send message to log
 	def log(self, message):
 		self.send(f"log:{message}")
-
+	
 	# send number of seconds to be registered in clock
 	def clock(self, seconds):
 		self.send(f"clock:{seconds}")
-
+	
 	# send gamestate
 	def updateGameState(self, gameState):
 		self.send(f"gameState:{gameState}")
-
+	
 	# invalid id message
 	def invalidId(self, id):
 		self.send(f"invalid:{id}")
+	
+	def __init__(self, handler):
+		self.sio = socketio.Server(cors_allowed_origins="*")
+		app = socketio.WSGIApp(self.sio)
+		
+		@self.sio.event
+		def connect(sid, environ, auth):
+			print("browser connected")
+			if(DEBUG):
+				self.sio.emit("Hello from Python")
+		
+		@self.sio.event
+		def data(sid, x):
+			if(DEBUG):
+				print(f"[b->P]\t{x}")
+			handler(self, x)
+			#~	you were here, i think there's an issue of scope / closure
+			#	where this frontEndHandler function is called in this context
+			#	where hermes isn't defined
+		
+		@self.sio.event
+		def disconnect(sid):
+			print("! browser disconnected")
+		
+		eventlet.wsgi.server(eventlet.listen(("", 8000)), app)
+	
 
 # ---- END ------------- Sending to Front-End ------------- END ----
 

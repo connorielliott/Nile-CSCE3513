@@ -21,7 +21,10 @@ greenTeam = []
 
 # --- START ------------ Game Countdown Timer ------------ START ---
 
-def startGame():
+def startGame(given_hermes):
+	global hermes
+	hermes = given_hermes
+	
 	# open db
 	database.openDB()
 	
@@ -168,7 +171,7 @@ def endGame():
 playerList = []
 
 # handle front-end messages
-def frontEndHandler(msg):
+def frontEndHandler(given_hermes, msg):
 	# parse message
 	fields = two_arrays.two_arrays(msg)[0]
 	values = two_arrays.two_arrays(msg)[1]
@@ -198,7 +201,7 @@ def frontEndHandler(msg):
 			id = -1
 			name = ""
 		elif field == "gameState" and value == "1":
-			startGame()
+			startGame(given_hermes)
 
 # ---- END ----------- Receiving from Front-End ----------- END ----
 
