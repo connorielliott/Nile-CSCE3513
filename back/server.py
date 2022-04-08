@@ -1,7 +1,6 @@
 import socket
 import _thread			# https://stackoverflow.com/a/64402988
-# these are ours
-from messageHandler import trafficHandler
+
 
 # --- START --------------- Configuration ---------------- START ---
 

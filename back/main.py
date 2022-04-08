@@ -1,10 +1,11 @@
 import time
 # these are ours
-import frontEnd
+from frontEnd import initHermes
 from database import DB
+import two_arrays
 
 
-# --- START --------------- Game Variables --------------- START ---
+# --- START ----------------- Variables ------------------ START ---
 
 gameState = 0
 gameDuration = 360		# Set game time duration variable
@@ -15,7 +16,7 @@ database = DB()
 redTeam = []
 greenTeam = []
 
-# ---- END ---------------- Game Variables ---------------- END ----
+# ---- END ------------------ Variables ------------------- END ----
 
 
 # --- START ------------ Game Countdown Timer ------------ START ---
@@ -30,27 +31,27 @@ def startGame():
 		if name == False:
 			return
 		elif (name != ""):
-			frontEnd.inform(["name", "team"], [name, "red"])
+			hermes.inform(["name", "team"], [name, "red"])
 	for player in greenTeam:
 		name = processPlayer(player)
 		if name == False:
 			return
 		elif name != "":
-			frontEnd.inform(["name", "team"], [name, "green"])
+			hermes.inform(["name", "team"], [name, "green"])
 
 	# Game countdown timer begins here
 	gameState = 1
-	frontEnd.updateGameState(gameState)
-	frontEnd.log("Begin game in t-minus")
+	hermes.updateGameState(gameState)
+	hermes.log("Begin game in t-minus")
 	for i in range(10, 0, -1):
-		frontEnd.clock(i)
-		frontEnd.log(f"{i} seconds")
+		hermes.clock(i)
+		hermes.log(f"{i} seconds")
 		time.sleep(1)
 	
 	#Starts game
 	gameState = 2
-	frontEnd.updateGameState(gameState)
-	frontEnd.log("Starting Game")
+	hermes.updateGameState(gameState)
+	hermes.log("Starting Game")
 	gameLoop()
 
 # ---- END ------------- Game Countdown Timer ------------- END ----
@@ -61,7 +62,7 @@ def startGame():
 def gameLoop():
 	# Gametime takes place here
 	gameTime = gameDuration
-	frontEnd.clock(gameTime)
+	hermes.clock(gameTime)
 	while(gameTime > 0):
 		# do things
 		# if necessary
@@ -69,19 +70,19 @@ def gameLoop():
 		# decrement time
 		time.sleep(1)
 		gameTime = gameTime - 1
-		frontEnd.clock(gameTime)
+		hermes.clock(gameTime)
 		
 		# time warnings
 		if(gameTime == 60):
 			# One minute warning
-			frontEnd.log("Warning: 1 minute remaining")
+			hermes.log("Warning: 1 minute remaining")
 		elif (gameTime <= 0):
 			endGame()
 		elif(gameTime <= 30):
 			# End of game countdown
 			if(gameTime == 30):
-				frontEnd.log("Game ending in t-minus")
-			frontEnd.log(f"{gameTime} seconds")
+				hermes.log("Game ending in t-minus")
+			hermes.log(f"{gameTime} seconds")
 
 # ---- END ------------------ Game Loop ------------------- END ----
 
@@ -134,7 +135,7 @@ def processPlayer(player):
 			name = getPlayerName(id)
 			return name
 		else:
-			frontEnd.invalidId(id)
+			hermes.invalidId(id)
 			return False
 	else:
 		if(playerExists(id)):
@@ -149,8 +150,8 @@ def processPlayer(player):
 def endGame():
 	# end game
 	gameState = 0
-	frontEnd.updateGameState(gameState)
-	frontEnd.log("Game over")
+	hermes.updateGameState(gameState)
+	hermes.log("Game over")
 	
 	# clear teams
 	redTeam = []
@@ -162,8 +163,61 @@ def endGame():
 # ---- END --------------- Extra Game Stuff --------------- END ----
 
 
+# --- START ---------- Receiving from Front-End ---------- START ---
+
+playerList = []
+
+# handle front-end messages
+def frontEndHandler(msg):
+	# parse message
+	fields = two_arrays.two_arrays(msg)[0]
+	values = two_arrays.two_arrays(msg)[1]
+	
+	# interpret messages
+	id = -1
+	name = ""
+	stopIndex = max(len(fields), len(values))
+	for i in range(0, stopIndex):
+		if i < len(fields):
+			field = fields[i]
+		else:
+			field = ""
+		if i < len(values):
+			value = values[i]
+		else:
+			value = ""
+
+		# the only possible messages are for player entry and to start the game
+		# both of these are only possible when gamestate is 0
+		if field == "id":
+			id = int(value)
+		elif field == "name":
+			name = value
+		elif field == "team":
+			addPlayerToTeam((id, name), value)
+			id = -1
+			name = ""
+		elif field == "gameState" and value == "1":
+			startGame()
+
+# ---- END ----------- Receiving from Front-End ----------- END ----
+
+
+# --- START ----------- Receiving from Traffic ----------- START ---
+
+def trafficHandler(msg):
+	# to be implemented
+	print("handling traffic dutifully.")
+	print(f"message sent from client: {msg}")
+
+# ---- END ------------ Receiving from Traffic ------------ END ----
+
+
 # --- START --------------- Main Function ---------------- START ---
 
-
+# hermes is the messenger to the front-end
+global hermes
+hermes = initHermes(frontEndHandler)
+# IF PYTHON HAD FUCKING FUNCTION HOISTING I WOULD NOT HAVE SPENT 5 HOURS TRYING TO FIX THIS SHITTY CIRCULAR IMPORT PROBLEM
 
 # ---- END ---------------- Main Function ----------------- END ----
