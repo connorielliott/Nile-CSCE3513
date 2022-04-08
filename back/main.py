@@ -22,6 +22,8 @@ greenTeam = []
 # --- START ------------ Game Countdown Timer ------------ START ---
 
 def startGame():
+	global hermes
+	
 	# open db
 	database.openDB()
 	
@@ -216,7 +218,6 @@ def trafficHandler(msg):
 # --- START --------------- Main Function ---------------- START ---
 
 # hermes is the messenger to the front-end
-global hermes
 hermes = initHermes(frontEndHandler)
 # IF PYTHON HAD FUCKING FUNCTION HOISTING I WOULD NOT HAVE SPENT 5 HOURS TRYING TO FIX THIS SHITTY CIRCULAR IMPORT PROBLEM
 
