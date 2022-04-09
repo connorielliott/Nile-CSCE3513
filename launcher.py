@@ -25,7 +25,7 @@ if __name__ == "__main__":
 	
 	# open splashscreen
 	run("./front/splashscreen.py")
-	
+	time.sleep(3)
 	# open game master python program
 	# this already includes udp python server and database python file
 	run("./back/main.py")
