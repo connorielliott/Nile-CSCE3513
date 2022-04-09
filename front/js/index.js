@@ -47,7 +47,7 @@ function F1() {
 function F5() {
 	//when gamestate is 0, check if player entries are valid and switch gamestate to 1 if good
 	//also switch to play action screen
-	if(!f5Good || gameState != 0 || !goodEntries()) {
+	if(!(f5Good && gameState == 0 && goodEntries() && currentScreenId == "player-entry-screen")) {
 		return;
 	}
 	
