@@ -10,6 +10,7 @@ const DEBUG = false;
 
 //connect to python server
 const client = dgram.createSocket("udp4");
+client.bind(7500);
 
 //setup socket server for browser
 const server = http.createServer((req, res) => {});
@@ -48,7 +49,7 @@ io.on("connection", (socket) => {
 //send to python
 function sendToPython(data) {
 	if(DEBUG) console.log(`[N->p]\t${data}`);
-	client.send(Buffer.from(data.toString()), 20001, "127.0.0.1", (err) => {
+	client.send(Buffer.from(data.toString()), 7501, "127.0.0.1", (err) => {
 		if(err) {
 			console.log("! failed to send message to python");
 		}
