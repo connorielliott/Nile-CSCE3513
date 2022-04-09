@@ -40,6 +40,7 @@ function F1() {
 	if(currentScreenId === "player-entry-screen") {
 		clearInputs();
 	}
+	clearPlayers();
 	switchToScreen("player-entry-screen");
 }
 

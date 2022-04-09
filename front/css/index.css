@@ -51,6 +51,8 @@ html, body {
 }
 .log-cont {
 	grid-area: pel;
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 .red-team-cont {
 	grid-area: per;
@@ -60,6 +62,8 @@ html, body {
 }
 .action-cont {
 	grid-area: pea;
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 .buttons-cont {
 	grid-area: peb;
