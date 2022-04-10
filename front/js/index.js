@@ -11,9 +11,7 @@ function F1() {
 	if(currentScreenId === "player-entry-screen") {
 		clearInputs();
 	}
-	clearPlayers();
-	score("red", 0);
-	score("green", 0);
+	clearActionScreen();
 	switchToScreen("player-entry-screen");
 }
 
@@ -124,6 +122,8 @@ function addPlayer(name, team) {
 }
 
 function clearActionScreen() {
+	score("red", 0);
+	score("green", 0);
 	clearPlayers();
 	clearLog();
 	clearActionLog();

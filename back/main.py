@@ -1,12 +1,10 @@
 import time
 # these are ours
-from messageHandler import initDisplay
+import server
 from database import DB
 
 
 # --- START --------------- Game Variables --------------- START ---
-
-display = initDisplay()
 
 gameState = 0
 gameDuration = 30		# Set game time duration variable
@@ -23,6 +21,9 @@ greenTeam = []
 # --- START ------------ Game Countdown Timer ------------ START ---
 
 def startGame():
+	global display
+	display = server.hermes
+	
 	# open db
 	database.openDB()
 	
@@ -74,7 +75,10 @@ def gameLoop():
 		i = i + 3
 		
 		# example kill message (killer team "red" or "green", killer name, killed team, killed name)
-		display.kill("red", "killer", "green", "killed")
+		if(i % 2 == 0):
+			display.kill("red", "killer", "green", "killed")
+		else:
+			display.kill("green", "murderer", "red", "murdered")
 		
 		
 		# decrement time
@@ -136,17 +140,18 @@ def addPlayerToTeam(player, team):
 		greenTeam.append(player)
 
 def processPlayer(player):
-	id = player[0]
-	name = player[1]
+	[id, name] = player
 	if(id == -1):
 		if(name != ""):
-			# new player
+			# new player (no id, yes name)
 			id = addPlayerToDatabase(name)
 			return name
 		else:
+			# do nothing (no id, no name)
 			return ""
 	if(name == ""):
 		# retrieve name with id if possible, otherwise do not add this player to the teams
+		# (yes id, no name)
 		if(playerExists(id)):
 			name = getPlayerName(id)
 			return name
@@ -155,12 +160,13 @@ def processPlayer(player):
 			clearTeams()
 			return False
 	else:
+		# (yes id, yes name)
 		if(playerExists(id)):
 			# update entry if possible
 			updatePlayerName(id, name)
 			return name
 		else:
-			addPlayerToDatabase(name)
+			id = addPlayerToDatabase(name)
 			return name
 	return ""
 

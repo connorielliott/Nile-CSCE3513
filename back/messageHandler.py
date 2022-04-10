@@ -1,6 +1,9 @@
-import server
+# these are ours
 import two_arrays
+import main
 
+
+# --- START -------------- Message Handlers -------------- START ---
 
 # handle front-end messages
 def frontEnd(msg):
@@ -30,23 +33,17 @@ def frontEnd(msg):
 		elif field == "name":
 			name = value
 		elif field == "team":
-			addPlayerToTeam((id, name), value)
+			main.addPlayerToTeam((id, name), value)
 			id = -1
 			name = ""
 		elif field == "gameState" and value == "1":
-			startGame()
+			main.startGame()
 
 
 # handle networking messages
-def networking(msg):
+def traffic(msg):
 	# to be implemented
 	print("handling network messages dutifully.")
 	print(f"message sent from client: {msg}")
 
-
-# must be before all server.send(<str>) usages since this gets the address of the bridge
-def initDisplay():
-	return server.start(frontEnd, networking)
-
-# keep down here to fix circular import issue
-from main import startGame, addPlayerToTeam
+# ---- END --------------- Message Handlers --------------- END ----
