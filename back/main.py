@@ -76,9 +76,9 @@ def gameLoop():
 		
 		# example kill message (killer team "red" or "green", killer name, killed team, killed name)
 		if(i % 2 == 0):
-			display.kill("red", "killer", "green", "killed")
+			display.kill("red", getPlayerName(1), "green", getPlayerName(3))
 		else:
-			display.kill("green", "murderer", "red", "murdered")
+			display.kill("green", getPlayerName(4), "red", getPlayerName(2))
 		
 		
 		# decrement time
