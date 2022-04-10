@@ -48,7 +48,7 @@ class DB:
 				return False
 	
 	def maxID(self):
-		query = "SELECT max(id) from player group by id limit 1;"
+		query = "SELECT id from player order by id desc limit 1;"
 		self.cursor.execute(query)
 		retrieve = self.cursor.fetchall()
 		for row in retrieve:
