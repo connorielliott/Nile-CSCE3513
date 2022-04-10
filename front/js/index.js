@@ -122,6 +122,7 @@ function addPlayer(name, team) {
 }
 
 function clearActionScreen() {
+	substate("-");
 	score("red", 0);
 	score("green", 0);
 	clearPlayers();
