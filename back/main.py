@@ -1,6 +1,5 @@
 import time
 # these are ours
-import messageHandler
 import server
 from database import DB
 
@@ -8,7 +7,7 @@ from database import DB
 # --- START --------------- Game Variables --------------- START ---
 
 gameState = 0
-gameDuration = 360		# Set game time duration variable
+gameDuration = 30		# Set game time duration variable
 
 database = DB()
 
@@ -22,6 +21,9 @@ greenTeam = []
 # --- START ------------ Game Countdown Timer ------------ START ---
 
 def startGame():
+	global display
+	display = server.hermes
+	
 	# open db
 	database.openDB()
 	
@@ -31,27 +33,27 @@ def startGame():
 		if name == False:
 			return
 		elif (name != ""):
-			server.inform(["name", "team"], [name, "red"])
+			display.inform(["name", "team"], [name, "red"])
 	for player in greenTeam:
 		name = processPlayer(player)
 		if name == False:
 			return
 		elif name != "":
-			server.inform(["name", "team"], [name, "green"])
+			display.inform(["name", "team"], [name, "green"])
 
 	# Game countdown timer begins here
 	gameState = 1
-	server.updateGameState(gameState)
-	server.log("Begin game in t-minus")
+	display.updateGameState(gameState)
+	display.log("Begin game in t-minus")
 	for i in range(10, 0, -1):
-		server.clock(i)
-		server.log("{} seconds".format(i))
+		display.clock(i)
+		display.log("{} seconds".format(i))
 		time.sleep(1)
 	
 	#Starts game
 	gameState = 2
-	server.updateGameState(gameState)
-	server.log("Starting Game")
+	display.updateGameState(gameState)
+	display.log("Starting Game")
 	gameLoop()
 
 # ---- END ------------- Game Countdown Timer ------------- END ----
@@ -62,27 +64,39 @@ def startGame():
 def gameLoop():
 	# Gametime takes place here
 	gameTime = gameDuration
-	server.clock(gameTime)
+	display.clock(gameTime)
+	i = 0
 	while(gameTime > 0):
 		# do things
-		# if necessary
+		
+		# example display score (team "red" or "green", total for that team points this round)
+		display.score("red", i)
+		display.score("green", 2 + i)
+		i = i + 3
+		
+		# example kill message (killer team "red" or "green", killer name, killed team, killed name)
+		if(i % 2 == 0):
+			display.kill("red", "killer", "green", "killed")
+		else:
+			display.kill("green", "murderer", "red", "murdered")
+		
 		
 		# decrement time
 		time.sleep(1)
 		gameTime = gameTime - 1
-		server.clock(gameTime)
+		display.clock(gameTime)
 		
 		# time warnings
 		if(gameTime == 60):
 			# One minute warning
-			server.log("Warning: 1 minute remaining")
+			display.log("Warning: 1 minute remaining")
 		elif (gameTime <= 0):
 			endGame()
 		elif(gameTime <= 30):
 			# End of game countdown
 			if(gameTime == 30):
-				server.log("Game ending in t-minus")
-			server.log("{} seconds".format(gameTime))
+				display.log("Game ending in t-minus")
+			display.log("{} seconds".format(gameTime))
 
 # ---- END ------------------ Game Loop ------------------- END ----
 
@@ -113,6 +127,12 @@ def updatePlayerName(id, name):
 
 # --- START -------------- Extra Game Stuff -------------- START ---
 
+def clearTeams():
+	global redTeam
+	global greenTeam
+	redTeam = []
+	greenTeam = []
+
 def addPlayerToTeam(player, team):
 	if team == "red":
 		redTeam.append(player)
@@ -120,44 +140,49 @@ def addPlayerToTeam(player, team):
 		greenTeam.append(player)
 
 def processPlayer(player):
-	id = player[0]
-	name = player[1]
+	[id, name] = player
 	if(id == -1):
 		if(name != ""):
-			# new player
+			# new player (no id, yes name)
 			id = addPlayerToDatabase(name)
 			return name
 		else:
+			# do nothing (no id, no name)
 			return ""
 	if(name == ""):
 		# retrieve name with id if possible, otherwise do not add this player to the teams
+		# (yes id, no name)
 		if(playerExists(id)):
 			name = getPlayerName(id)
 			return name
 		else:
-			server.invalidId(id)
+			display.invalidId(id)
+			clearTeams()
 			return False
 	else:
+		# (yes id, yes name)
 		if(playerExists(id)):
 			# update entry if possible
 			updatePlayerName(id, name)
 			return name
 		else:
-			addPlayerToDatabase(name)
+			id = addPlayerToDatabase(name)
 			return name
 	return ""
 
 def endGame():
 	# end game
 	gameState = 0
-	server.updateGameState(gameState)
-	server.log("Game over")
+	display.updateGameState(gameState)
+	display.log("Game over")
+	
+	
+	# example winning team (message to display at top of screen)
+	display.state("GREEN Team wins!")
+	
 	
 	# clear teams
-	global redTeam
-	global greenTeam
-	redTeam = []
-	greenTeam = []
+	clearTeams()
 	
 	# close db
 	database.closeDB()

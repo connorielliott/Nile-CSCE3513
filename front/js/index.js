@@ -3,6 +3,155 @@ var currentScreenId = "player-entry-screen";
 var f1Good = true,
 	f5Good = true;
 
+//player entry stuff
+function F1() {
+	//when gamestate is 0, switch to player entry screen
+	//if already on this screen, clear player entry data
+	if(!(f1Good && gameState == 0)) return;
+	if(currentScreenId === "player-entry-screen") {
+		clearInputs();
+	}
+	clearActionScreen();
+	switchToScreen("player-entry-screen");
+}
+
+function clearInputs() {
+	let inputs = document.getElementsByClassName("list-input");
+	for(let i = 0; i < inputs.length; i++) {
+		inputs[i].value = "";
+	}
+}
+
+function highlight(id) {
+	let idInputs = document.getElementsByClassName("list-input-id");
+	for(let i = 0; i < idInputs.length; i++) {
+		if(Number(idInputs[i].value.trim()) == id) {
+			//~	more animation here or smth
+			idInputs[i].focus();
+			alert("Please check this id and name pair.");
+		}
+	}
+}
+
+
+//play action stuff
+function F5() {
+	//when gamestate is 0, check if player entries are valid and switch gamestate to 1 if good
+	//also switch to play action screen
+	if(!(f5Good && gameState == 0 && currentScreenId == "player-entry-screen" && goodEntries())) {
+		return;
+	}
+	
+	//send user infos
+	let idInputs = document.getElementsByClassName("list-input-id"),
+		nameInputs = document.getElementsByClassName("list-input-name");
+	for(let i = 0; i < idInputs.length; i++) {
+		let id = idInputs[i].value.trim(),
+			name = nameInputs[i].value.trim();
+		if(!goodEntry(id, name)) continue;
+		let fields = [],
+			values = [];
+		if(id != "") {
+			fields.push("id");
+			values.push(id);
+		}
+		if(name.length > 0) {
+			fields.push("name");
+			values.push(name);
+		}
+		fields.push("team");
+		values.push(idInputs[i].getAttribute("class").indexOf("red") > -1 ? "red" : "green");
+		send(fvFormat(fields, values));
+	}
+	
+	//send gameState update
+	send("gameState:1");
+}
+
+//displaying messages and info stuff
+function state(message) {
+	document.getElementById("state").innerHTML = message;
+	log(message);
+}
+function substate(message) {
+	document.getElementById("substate").innerHTML = message;
+	log(message);
+}
+
+function clock(seconds) {
+	let [mins, secs] = timeFromSeconds(seconds);
+	document.getElementById("clock").innerHTML = zero(mins, 2) + ":" + zero(secs, 2);
+	//for auto-switch to play action screen if disconnected
+	switchToScreen("play-action-screen");
+}
+
+function score(team, skore) {
+	document.getElementById(team + "-team-title-score").innerHTML = team.toUpperCase() + " Team - " + skore;
+}
+
+function clearLog() {
+	document.getElementById("log").innerHTML = "";
+}
+function log(message) {
+	let li = document.createElement("li");
+	li.setAttribute("class", "log-message");
+	li.innerHTML = message;
+	document.getElementById("log").appendChild(li);
+	li.scrollIntoView();
+}
+function clearActionLog() {
+	document.getElementById("action-list").innerHTML = "";
+}
+function actionLog(message) {
+	let li = document.createElement("li");
+	li.setAttribute("class", "action-message");
+	li.innerHTML = message;
+	document.getElementById("action-list").appendChild(li);
+	li.scrollIntoView();
+}
+
+function clearPlayers() {
+	document.getElementById("red-team-list").innerHTML = "";
+	document.getElementById("green-team-list").innerHTML = "";
+}
+function addPlayer(name, team) {
+	let li = document.createElement("li");
+	li.setAttribute("class", "player " + team + "-player");
+	li.innerHTML = name;
+	document.getElementById(team + "-team-list").appendChild(li);
+}
+
+function clearActionScreen() {
+	substate("-");
+	score("red", 0);
+	score("green", 0);
+	clearPlayers();
+	clearLog();
+	clearActionLog();
+}
+
+
+//game state management
+function updateForGameState() {
+	switch(gameState) {
+		case 0:
+			state("Game Inactive.");
+			enableButton("f1");
+			enableButton("f5");
+			break;
+		case 1:
+			state("Game Starting Soon!");
+			disableButton("f1");
+			disableButton("f5");
+			switchToScreen("play-action-screen");
+			break;
+		case 2:
+			state("Game Active!");
+			break;
+	}
+}
+
+//screen management
 function switchToScreen(id) {
 	switch(id) {
 		case "player-entry-screen":
@@ -26,100 +175,7 @@ function switchToScreen(id) {
 	}
 }
 
-function clearInputs() {
-	let inputs = document.getElementsByClassName("list-input");
-	for(let i = 0; i < inputs.length; i++) {
-		inputs[i].value = "";
-	}
-}
-
-function F1() {
-	//when gamestate is 0, switch to player entry screen
-	//if already on this screen, clear player entry data
-	if(!f1Good || gameState != 0) return;
-	if(currentScreenId === "player-entry-screen") {
-		clearInputs();
-	}
-	clearPlayers();
-	switchToScreen("player-entry-screen");
-}
-
-function F5() {
-	//when gamestate is 0, check if player entries are valid and switch gamestate to 1 if good
-	//also switch to play action screen
-	if(!(f5Good && gameState == 0 && goodEntries() && currentScreenId == "player-entry-screen")) {
-		return;
-	}
-	
-	//send user infos
-	let idInputs = document.getElementsByClassName("list-input-id"),
-		nameInputs = document.getElementsByClassName("list-input-name");
-	for(let i = 0; i < idInputs.length; i++) {
-		let id = idInputs[i].value.trim(),
-			name = nameInputs[i].value.trim();
-		if(!goodEntry(id, name)) continue;
-		let fields = [],
-			values = [];
-		fields.push("id");
-		values.push(id);
-		if(name.length > 0) {
-			fields.push("name");
-			values.push(name);
-		}
-		fields.push("team");
-		values.push(idInputs[i].getAttribute("class").indexOf("red") > -1 ? "red" : "green");
-		send(fvFormat(fields, values));
-	}
-	
-	//send gameState update
-	send("gameState:1");
-}
-
-function clock(seconds) {
-	let [mins, secs] = timeFromSeconds(seconds);
-	document.getElementById("clock").innerHTML = zero(mins, 2) + ":" + zero(secs, 2);
-	//for auto-switch to play action screen if disconnected
-	switchToScreen("play-action-screen");
-}
-
-function state(message) {
-	document.getElementById("state").innerHTML = message;
-}
-function substate(message) {
-	document.getElementById("substate").innerHTML = message;
-}
-
-function log(message) {
-	let li = document.createElement("li");
-	li.setAttribute("class", "log-message");
-	li.innerHTML = message;
-	document.getElementById("log").appendChild(li);
-	li.scrollIntoView();
-}
-
-function addPlayer(name, team) {
-	let li = document.createElement("li");
-	li.setAttribute("class", "player " + team + "-player");
-	li.innerHTML = name;
-	document.getElementById(team + "-team-list").appendChild(li);
-}
-
-function clearPlayers() {
-	document.getElementById("red-team-list").innerHTML = "";
-	document.getElementById("green-team-list").innerHTML = "";
-}
-
-function highlight(id) {
-	let idInputs = document.getElementsByClassName("list-input-id");
-	for(let i = 0; i < idInputs.length; i++) {
-		if(Number(idInputs[i].value.trim()) == id) {
-			//~	more animation here or smth
-			idInputs[i].focus();
-			alert("Please check this id and name pair.");
-		}
-	}
-}
-
+//button management
 function enableButton(f) {
 	document.getElementById(f + "-button").removeAttribute("disabled");
 	switch(f) {
@@ -146,25 +202,8 @@ function modButton(f, actionMessage) {
 	document.getElementById(f + "-button").innerHTML = f.toUpperCase() + " to " + actionMessage;
 }
 
-function updateForGameState() {
-	switch(gameState) {
-		case 0:
-			state("Game Inactive.");
-			enableButton("f1");
-			enableButton("f5");
-			break;
-		case 1:
-			state("Game Starting Soon!");
-			disableButton("f1");
-			disableButton("f5");
-			switchToScreen("play-action-screen");
-			break;
-		case 2:
-			state("Game Active!");
-			break;
-	}
-}
 
+//keypress
 window.onkeydown = (ev) => {
 	if(ev.keyCode >= 112 && ev.keyCode <= 123) {
 		ev.preventDefault();

@@ -1,12 +1,14 @@
 const socket = io("http://127.0.0.1:8000");
 
+const DEBUG = true;
+
 function send(data) {
-	console.log("[B->n]\t" + data);
+	if(DEBUG) console.log("[B->n]\t" + data);
 	socket.emit("data", data);
 }
 
 socket.on("data", (data) => {
-	console.log("[n->B]\t" + data);
+	if(DEBUG) console.log("[n->B]\t" + data);
 	
 	//interpret message
 	let [fields, values] = twoArrays(data);
@@ -14,7 +16,10 @@ socket.on("data", (data) => {
 	//do stuff
 	let stopIndex = Math.max(fields.length, values.length);
 	let name = "",
+		skore = -1,
 		team = "";
+	let killed = {},
+		killer = {};
 	for(let i = 0; i < stopIndex; i++) {
 		let field = i < fields.length ? fields[i] : "";
 		let value = i < values.length ? values[i] : "";
@@ -30,16 +35,44 @@ socket.on("data", (data) => {
 				highlight(Number(value));
 				clearPlayers();
 				break;
+			case "killed":
+				killed.name = value;
+				break;
+			case "killedTeam":
+				killed.team = value;
+				break;
+			case "killer":
+				killer.name = value;
+				break;
+			case "killerTeam":
+				killer.team = value;
+				let message = `<span class="${killer.team}-text">${killer.name}</span> tagged <span class="${killed.team}-text">${killed.name}</span>!`;
+				actionLog(message);
+				killed = {};
+				killer = {};
+				break;
 			case "log":
 				log(value);
 				break;
 			case "name":
 				name = value;
 				break;
+			case "score":
+				skore = Number(value);
+				break;
+			case "state":
+				substate(value);
+				break;
 			case "team":
 				team = value;
-				addPlayer(name, team);
-				name = "";
+				if(name != "") {
+					addPlayer(name, team);
+					name = "";
+				}
+				else if(skore != -1) {
+					score(team, skore);
+					skore = -1;
+				}
 				team = "";
 				break;
 		}
