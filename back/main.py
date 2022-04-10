@@ -1,8 +1,9 @@
 import time
 # these are ours
-from frontEnd import Hermes
-from database import DB
 import two_arrays
+from frontEnd import Hermes
+from server import start
+from database import DB
 
 
 # --- START ----------------- Variables ------------------ START ---
@@ -41,7 +42,7 @@ def startGame(given_hermes):
 			return
 		elif name != "":
 			hermes.inform(["name", "team"], [name, "green"])
-
+	
 	# Game countdown timer begins here
 	gameState = 1
 	hermes.updateGameState(gameState)
@@ -168,7 +169,7 @@ def endGame():
 
 # --- START ---------- Receiving from Front-End ---------- START ---
 
-playerList = []
+# playerList = []
 
 # handle front-end messages
 def frontEndHandler(given_hermes, msg):
@@ -189,7 +190,7 @@ def frontEndHandler(given_hermes, msg):
 			value = values[i]
 		else:
 			value = ""
-	
+		
 		# the only possible messages are for player entry and to start the game
 		# both of these are only possible when gamestate is 0
 		if field == "id":

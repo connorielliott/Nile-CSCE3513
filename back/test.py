@@ -1,18 +1,8 @@
-class Hermes:
-	def __init__(self):
-		pass
-	
-	def send(x):
-		print(x)
+thing = 
 
-def server(handler):
-	value = "a message from outside came"
-	handler(value)
+def handler():
+	thing()
 
-def start():
-	hermes.send("hello")
-
-server()
 
 
 '''

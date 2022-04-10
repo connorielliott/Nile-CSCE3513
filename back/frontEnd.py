@@ -64,9 +64,6 @@ class Hermes:
 			if(DEBUG):
 				print(f"[b->P]\t{x}")
 			handler(self, x)
-			#~	you were here, i think there's an issue of scope / closure
-			#	where this frontEndHandler function is called in this context
-			#	where hermes isn't defined
 		
 		@self.sio.event
 		def disconnect(sid):

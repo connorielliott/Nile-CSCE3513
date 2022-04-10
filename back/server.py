@@ -1,5 +1,4 @@
 import socket
-import _thread			# https://stackoverflow.com/a/64402988
 
 
 # --- START --------------- Configuration ---------------- START ---
