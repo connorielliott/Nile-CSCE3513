@@ -51,6 +51,8 @@ html, body {
 }
 .log-cont {
 	grid-area: pel;
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 .red-team-cont {
 	grid-area: per;
@@ -58,8 +60,16 @@ html, body {
 .green-team-cont {
 	grid-area: peg;
 }
+.team-title {
+	//
+}
+.title-score {
+	//
+}
 .action-cont {
 	grid-area: pea;
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 .buttons-cont {
 	grid-area: peb;
@@ -76,4 +86,12 @@ html, body {
 .list-item * {
 	display: inline-block;
 	margin: 0;
+}
+
+
+.red-text {
+	color: #f00;
+}
+.green-text {
+	color: #0f0;
 }
