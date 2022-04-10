@@ -1,8 +1,6 @@
 import server
 import two_arrays
-from main import startGame, addPlayerToTeam
 
-playerList = []
 
 # handle front-end messages
 def frontEnd(msg):
@@ -38,11 +36,17 @@ def frontEnd(msg):
 		elif field == "gameState" and value == "1":
 			startGame()
 
+
 # handle networking messages
 def networking(msg):
 	# to be implemented
 	print("handling network messages dutifully.")
 	print(f"message sent from client: {msg}")
 
+
 # must be before all server.send(<str>) usages since this gets the address of the bridge
-server.start(frontEnd, networking)
+def initDisplay():
+	return server.start(frontEnd, networking)
+
+# keep down here to fix circular import issue
+from main import startGame, addPlayerToTeam

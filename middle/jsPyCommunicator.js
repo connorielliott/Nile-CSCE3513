@@ -31,6 +31,7 @@ function sendToBrowser(data) {
 //browser listen / send
 io.on("connection", (socket) => {
 	console.log(`browser connected`);
+	//~	have python send all team info over again and scores and stuff
 	if(DEBUG) sendToBrowser(`Hello from NodeJS`);
 	
 	socket.on("data", (data) => {
