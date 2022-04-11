@@ -22,7 +22,7 @@ counter = input('How many events do you want ==> ')
 UDPClientSocketTransmit = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # counter number of events, random player and order
-i = 1
+i = 0
 while i < int(counter):
     if random.randint(1,2) == 1:
         redplayer = red1
@@ -44,4 +44,4 @@ while i < int(counter):
     UDPClientSocketTransmit.sendto(str.encode(str(message)), serverAddressPort)
     time.sleep(random.randint(1,3))
 
-    print("program complete")
+print("program complete")

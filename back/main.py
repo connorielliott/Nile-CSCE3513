@@ -7,13 +7,15 @@ from database import DB
 # --- START --------------- Game Variables --------------- START ---
 
 gameState = 0
-gameDuration = 30		# Set game time duration variable
+gameDuration = 45		# Set game time duration variable
 
 database = DB()
 
-# will hold tuples (number id, string name)
-redTeam = []
-greenTeam = []
+# player dictionary has int id for key and (string team, string name) tuple for value
+players = {}
+
+redScore = 0
+greenScore = 0
 
 # ---- END ---------------- Game Variables ---------------- END ----
 
@@ -28,20 +30,19 @@ def startGame():
 	database.openDB()
 	
 	# send team player information to front-ends
-	for player in redTeam:
-		name = processPlayer(player)
+	global players
+	for id, player in players.items():
+		(team, name) = player
+		name = processPlayer(id, name)
+		print("id={id}, team={team}, name={name}".format(id=id, team=team, name=name))
 		if name == False:
 			return
 		elif (name != ""):
-			display.inform(["name", "team"], [name, "red"])
-	for player in greenTeam:
-		name = processPlayer(player)
-		if name == False:
-			return
-		elif name != "":
-			display.inform(["name", "team"], [name, "green"])
+			display.inform(["name", "team"], [name, team])
+			players[id] = (team, name)
 
 	# Game countdown timer begins here
+	global gameState
 	gameState = 1
 	display.updateGameState(gameState)
 	display.log("Begin game in t-minus")
@@ -67,19 +68,9 @@ def gameLoop():
 	display.clock(gameTime)
 	i = 0
 	while(gameTime > 0):
-		# do things
-		
-		# example display score (team "red" or "green", total for that team points this round)
-		display.score("red", i)
-		display.score("green", 2 + i)
-		i = i + 3
-
-		# example kill message (killer team "red" or "green", killer name, killed team, killed name)
-		if(i % 2 == 0):
-			display.kill("red", getPlayerName(1), "green", getPlayerName(3))
-		else:
-			display.kill("green", getPlayerName(4), "red", getPlayerName(2))
-		
+		# display scores
+		display.score("red", redScore)
+		display.score("green", greenScore)
 		
 		# decrement time
 		time.sleep(1)
@@ -121,26 +112,24 @@ def updatePlayerName(id, name):
 	# obvious
 	database.updateName(id,name)
 
-
 # ---- END ---------------- Database Stuff ---------------- END ----
 
 
 # --- START -------------- Extra Game Stuff -------------- START ---
 
-def clearTeams():
-	global redTeam
-	global greenTeam
-	redTeam = []
-	greenTeam = []
+def addPlayerToTeam(id, name, team):
+	global players
+	players[id] = (team, name)
 
-def addPlayerToTeam(player, team):
-	if team == "red":
-		redTeam.append(player)
-	elif team == "green":
-		greenTeam.append(player)
+def incrementScore(team):
+	if(team == "red"):
+		global redScore
+		redScore += 1
+	elif(team == "green"):
+		global greenScore
+		greenScore += 1
 
-def processPlayer(player):
-	[id, name] = player
+def processPlayer(id, name):
 	if(id == -1):
 		if(name != ""):
 			# new player (no id, yes name)
@@ -157,7 +146,8 @@ def processPlayer(player):
 			return name
 		else:
 			display.invalidId(id)
-			clearTeams()
+			global players
+			players = {}
 			return False
 	else:
 		# (yes id, yes name)
@@ -172,26 +162,34 @@ def processPlayer(player):
 
 def endGame():
 	# end game
+	global gameState
 	gameState = 0
 	display.updateGameState(gameState)
 	display.log("Game over")
 	
+	# display winning team
+	global redScore
+	global greenScore
+	if(redScore == greenScore):
+		display.state("You're both garbage!")
+	elif(greenScore > redScore):
+		display.state("GREEN Team wins!")
+	else:
+		display.state("RED Team wins!")
 	
-	# example winning team (message to display at top of screen)
-	display.state("GREEN Team wins!")
+	# reset score
+	redScore = 0
+	greenScore = 0
 	
-	
-	# clear teams
-	clearTeams()
+	# clear players
+	global players
+	players = {}
 	
 	# close db
 	database.closeDB()
 
+def getPlayer(id):
+	# given id of player, return (team, name) tuple of player from team array
+	return players[id]
+
 # ---- END --------------- Extra Game Stuff --------------- END ----
-
-
-# --- START --------------- Main Function ---------------- START ---
-
-
-
-# ---- END ---------------- Main Function ----------------- END ----

@@ -1,8 +1,7 @@
-import atexit
 import os
+from threading import Thread
 import time
 import webbrowser
-import _thread
 
 # list of threads
 threads = []
@@ -20,16 +19,10 @@ def open(x):
 def run(x):
 	try:
 		print("starting \"{}\"...".format(x))
-		threads.append(_thread.start_new_thread(open, (x,)))
+		thread = Thread(target=open, args=(x,), daemon=True)
+		thread.start()
 	except:
 		print("! failed to start \"{}\"".format(x))
-
-# kill all threads		https://www.geeksforgeeks.org/detect-script-exit-in-python/
-@atexit.register
-def killAll():
-	for thread in threads:
-		thread.exit()
-	print("KILLED ALL JACKSON BURGERS")
 
 if __name__ == "__main__":
 	print("app start...")
@@ -37,8 +30,9 @@ if __name__ == "__main__":
 	# open splashscreen
 	run("./front/splashscreen.py")
 	time.sleep(3)
+
 	# open game master python program
-	# this already includes udp python server and database python file
+	# this includes database python file
 	run("./back/main.py")
 	
 	# open browser-python nodejs bridge
