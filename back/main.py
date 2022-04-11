@@ -65,13 +65,19 @@ def gameLoop():
 	# Gametime takes place here
 	gameTime = gameDuration
 	display.clock(gameTime)
+	red_score = 0
+	green_score = 0
 	i = 0
 	while(gameTime > 0):
 		# do things
 		
 		# example display score (team "red" or "green", total for that team points this round)
-		display.score("red", i)
-		display.score("green", 2 + i)
+		if (player_scored == red):
+			red_score = update_red_score(red_score)
+		elif (player_scored == green):
+			green_score = update_green_score(green_score)
+		display.score("red", red_score)
+		display.score("green", green_score)
 		i = i + 3
 
 		# example kill message (killer team "red" or "green", killer name, killed team, killed name)
@@ -132,6 +138,12 @@ def clearTeams():
 	global greenTeam
 	redTeam = []
 	greenTeam = []
+
+def update_red_score(red_score):
+	return red_score + 1
+
+def update_green_score(green_score):
+	return green_score + 1
 
 def addPlayerToTeam(player, team):
 	if team == "red":
