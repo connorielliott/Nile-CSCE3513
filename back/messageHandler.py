@@ -33,7 +33,7 @@ def frontEnd(msg):
 		elif field == "name":
 			name = value
 		elif field == "team":
-			main.addPlayerToTeam((id, name), value)
+			main.addPlayerToTeam(id, name, value)
 			id = -1
 			name = ""
 		elif field == "gameState" and value == "1":
@@ -42,8 +42,27 @@ def frontEnd(msg):
 
 # handle networking messages
 def traffic(msg):
-	# to be implemented
-	print("handling network messages dutifully.")
-	print(f"message sent from client: {msg}")
+	print(f"traffic: {msg}")
+
+	if(main.gameState != 2):
+		return
+
+	# get killer and killed int IDs
+	[killerId, killedId] = msg.split(":")
+	killerId = int(killerId)
+	killedId = int(killedId)
+	
+	# get killer and killed teams and names
+	(killerTeam, killerName) = main.getPlayer(killerId)
+	(killedTeam, killedName) = main.getPlayer(killedId)
+
+	# increment score appropriately
+	if(killerTeam == "red"):
+		main.incrementScore("red")
+	elif(killerTeam == "green"):
+		main.incrementScore("green")
+
+	# send kill message
+	main.display.kill(killerTeam, killerName, killedTeam, killedName)
 
 # ---- END --------------- Message Handlers --------------- END ----

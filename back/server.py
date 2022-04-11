@@ -1,6 +1,6 @@
 import json
 import socket
-# import _thread			# https://stackoverflow.com/a/64402988
+from threading import Thread
 
 
 DEBUG = True
@@ -107,14 +107,15 @@ def listen():
 
 		message = str(message)[2:-1]
 		
-		if('0'<= message[0] and message[0] <= '9'):
+		if('0' <= message[0] and message[0] <= '9'):
 			print("integer message")
 			messageHandler.traffic(message)
 		else:
 			hermes.setRelayAddress(address)
 			print("string message")
 			if(DEBUG): print("[n->P]\t{}".format(message))
-			messageHandler.frontEnd(message)
+			thread = Thread(target=messageHandler.frontEnd, args=(message,))
+			thread.start()
 
 
 # start
