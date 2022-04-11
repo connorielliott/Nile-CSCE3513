@@ -42,8 +42,7 @@ def frontEnd(msg):
 
 # handle networking messages
 def traffic(msg):
-	# to be implemented
-	print("handling network messages dutifully.")
-	print(f"message sent from client: {msg}")
+	print(f"traffic: {msg}")
+	main.display.kill("red", "TOY", "green", "BEAST")
 
 # ---- END --------------- Message Handlers --------------- END ----

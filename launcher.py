@@ -1,7 +1,11 @@
+import atexit
 import os
 import time
 import webbrowser
 import _thread
+
+# list of threads
+threads = []
 
 # distinguishes between .js and .py and runs node or python accordingly
 def open(x):
@@ -19,6 +23,13 @@ def run(x):
 		threads.append(_thread.start_new_thread(open, (x,)))
 	except:
 		print("! failed to start \"{}\"".format(x))
+
+# kill all threads		https://www.geeksforgeeks.org/detect-script-exit-in-python/
+@atexit.register
+def killAll():
+	for thread in threads:
+		thread.exit()
+	print("KILLED ALL JACKSON BURGERS")
 
 if __name__ == "__main__":
 	print("app start...")

@@ -1,6 +1,6 @@
 import json
 import socket
-# import _thread			# https://stackoverflow.com/a/64402988
+import _thread			# https://stackoverflow.com/a/64402988
 
 
 DEBUG = True
@@ -120,6 +120,7 @@ def listen():
 # start
 try:
 	print("starting listening thread...")
+	#_thread.start_new_thread(listen, ())
 	listen()
 except Exception as e:
 	print("! failed listening thread:")
