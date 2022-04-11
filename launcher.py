@@ -16,7 +16,7 @@ def open(x):
 def run(x):
 	try:
 		print("starting \"{}\"...".format(x))
-		_thread.start_new_thread(open, (x,))
+		threads.append(_thread.start_new_thread(open, (x,)))
 	except:
 		print("! failed to start \"{}\"".format(x))
 

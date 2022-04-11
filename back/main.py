@@ -73,7 +73,7 @@ def gameLoop():
 		display.score("red", i)
 		display.score("green", 2 + i)
 		i = i + 3
-		
+
 		# example kill message (killer team "red" or "green", killer name, killed team, killed name)
 		if(i % 2 == 0):
 			display.kill("red", getPlayerName(1), "green", getPlayerName(3))
