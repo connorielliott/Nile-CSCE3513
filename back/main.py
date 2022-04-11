@@ -7,7 +7,7 @@ from database import DB
 # --- START --------------- Game Variables --------------- START ---
 
 gameState = 0
-gameDuration = 45		# Set game time duration variable
+gameDuration = 360		# Set game time duration variable
 
 database = DB()
 
@@ -167,9 +167,13 @@ def endGame():
 	display.updateGameState(gameState)
 	display.log("Game over")
 	
-	# display winning team
+	# display scores one last time
 	global redScore
 	global greenScore
+	display.score("red", redScore)
+	display.score("green", greenScore)
+	
+	# display winning team
 	if(redScore == greenScore):
 		display.state("You're both garbage!")
 	elif(greenScore > redScore):

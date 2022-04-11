@@ -3,7 +3,7 @@ import socket
 from threading import Thread
 
 
-DEBUG = True
+DEBUG = False
 
 localIP     = "127.0.0.1"
 recv_port = 7501
