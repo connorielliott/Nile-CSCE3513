@@ -71,6 +71,8 @@ socket.on("data", (data) => {
 				}
 				else if(skore != -1) {
 					score(team, skore);
+					team == "red" ? redScore = skore : greenScore = skore;
+					updateBlinking();
 					skore = -1;
 				}
 				team = "";

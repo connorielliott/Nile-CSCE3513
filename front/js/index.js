@@ -2,6 +2,8 @@ var gameState = 0;
 var currentScreenId = "player-entry-screen";
 var f1Good = true,
 	f5Good = true;
+var redScore = 0,
+	greenScore = 0;
 
 //player entry stuff
 function F1() {
@@ -128,6 +130,25 @@ function clearActionScreen() {
 	clearPlayers();
 	clearLog();
 	clearActionLog();
+}
+
+function updateBlinking() {
+	let redElement = document.getElementById("red-team-title-score"),
+		greenElement = document.getElementById("green-team-title-score");
+	if(redScore == greenScore) {
+		redElement.setAttribute("class", redElement.getAttribute("class").replace("blinking", ""));
+		greenElement.setAttribute("class", greenElement.getAttribute("class").replace("blinking", ""));
+	}
+	else if(redScore > greenScore) {
+		if(redElement.getAttribute("class").indexOf("blinking") == -1)
+		redElement.setAttribute("class", redElement.getAttribute("class") + " blinking");
+		greenElement.setAttribute("class", greenElement.getAttribute("class").replace("blinking", ""));
+	}
+	else {
+		if(greenElement.getAttribute("class").indexOf("blinking") == -1)
+			greenElement.setAttribute("class", greenElement.getAttribute("class") + " blinking");
+		redElement.setAttribute("class", redElement.getAttribute("class").replace("blinking", ""));
+	}
 }
 
 
