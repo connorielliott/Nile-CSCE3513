@@ -1,4 +1,3 @@
-import json
 import socket
 from threading import Thread
 
@@ -13,7 +12,8 @@ bufferSize  = 1024
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
-# Bind to address and ip
+# Bind to address and ip	(https://stackoverflow.com/a/5875178)
+UDPServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 UDPServerSocket.bind((localIP, recv_port))
 
 

@@ -61,6 +61,10 @@ def traffic(msg):
 		main.incrementScore("red")
 	elif(killerTeam == "green"):
 		main.incrementScore("green")
+	
+	# display scores
+	main.display.score("red", main.redScore)
+	main.display.score("green", main.greenScore)
 
 	# send kill message
 	main.display.kill(killerTeam, killerName, killedTeam, killedName)

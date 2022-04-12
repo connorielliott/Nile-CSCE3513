@@ -34,7 +34,6 @@ def startGame():
 	for id, player in players.items():
 		(team, name) = player
 		name = processPlayer(id, name)
-		print("id={id}, team={team}, name={name}".format(id=id, team=team, name=name))
 		if name == False:
 			return
 		elif (name != ""):
@@ -68,10 +67,6 @@ def gameLoop():
 	display.clock(gameTime)
 	i = 0
 	while(gameTime > 0):
-		# display scores
-		display.score("red", redScore)
-		display.score("green", greenScore)
-		
 		# decrement time
 		time.sleep(1)
 		gameTime = gameTime - 1
