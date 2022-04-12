@@ -127,6 +127,10 @@ function clearActionScreen() {
 	substate("-");
 	score("red", 0);
 	score("green", 0);
+	let redElement = document.getElementById("red-team-title-score"),
+		greenElement = document.getElementById("green-team-title-score");
+	redElement.setAttribute("class", redElement.getAttribute("class").replace("blinking", ""));
+	greenElement.setAttribute("class", greenElement.getAttribute("class").replace("blinking", ""));
 	clearPlayers();
 	clearLog();
 	clearActionLog();

@@ -29,3 +29,5 @@ back/__pycache__/
 
 # node modules
 middle/node_modules/
+
+.idea/

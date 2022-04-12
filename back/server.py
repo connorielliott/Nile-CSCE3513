@@ -108,13 +108,15 @@ def listen():
 		message = str(message)[2:-1]
 		
 		if('0' <= message[0] and message[0] <= '9'):
-			print("integer message")
+			if(DEBUG):
+				print("integer message")
 			messageHandler.traffic(message)
 		else:
 			hermes.setRelayAddress(address)
-			print("string message")
-			if(DEBUG): print("[n->P]\t{}".format(message))
-			thread = Thread(target=messageHandler.frontEnd, args=(message,))
+			if(DEBUG):
+				print("string message")
+				print("[n->P]\t{}".format(message))
+			thread = Thread(target=messageHandler.frontEnd, args=(message,), daemon=True)
 			thread.start()
 
 
